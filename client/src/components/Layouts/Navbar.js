@@ -147,12 +147,15 @@ function Navbar() {
                 </a>
 
                 <Divider />
-                <MenuItem onClick={handleClose}>
-                  <ListItemIcon>
-                    <LoginIcon fontSize="small" />
-                  </ListItemIcon>
-                  Sign Up
-                </MenuItem>
+
+                <Link to="/redirect">
+                  <MenuItem onClick={handleClose}>
+                    <ListItemIcon>
+                      <LoginIcon fontSize="small" />
+                    </ListItemIcon>
+                    Sign Up
+                  </MenuItem>
+                </Link>
               </Menu>
             </React.Fragment>
           </div>

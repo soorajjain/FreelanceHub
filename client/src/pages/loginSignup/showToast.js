@@ -11,7 +11,7 @@ const showToast = (code) => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "dark",
+        theme: "light",
       });
       break;
     case "201":
@@ -23,7 +23,7 @@ const showToast = (code) => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "dark",
+        theme: "light",
       });
       break;
     case "202":
@@ -35,7 +35,7 @@ const showToast = (code) => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "dark",
+        theme: "light",
       });
       break;
     case "203":
@@ -47,7 +47,7 @@ const showToast = (code) => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "dark",
+        theme: "light",
       });
       break;
     case "204":
@@ -59,7 +59,7 @@ const showToast = (code) => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "dark",
+        theme: "light",
       });
       break;
     case "500":
@@ -72,7 +72,7 @@ const showToast = (code) => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "dark",
+        theme: "light",
       });
       break;
   }
