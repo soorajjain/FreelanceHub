@@ -67,7 +67,7 @@ function Navbar() {
         </div>
         <div className="flex gap-6 items-center mx-4">
           <Link
-            to="/Contact"
+            to="/redirect"
             className="border-[2px] border-[#023246]  hover:bg-[#023246] hover:text-[#FFFFFF] rounded-3xl md:p-2 md:px-6 p-2 px-3 hidden sm:block"
           >
             Sign Up
