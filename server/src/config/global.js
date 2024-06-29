@@ -1,4 +1,4 @@
-const RESPONSE = {
+export const RESPONSE = {
   SUCCESS: {
     code: "400",
     msg: "everyting worked as expected",
@@ -28,5 +28,3 @@ const RESPONSE = {
     msg: "access denied",
   },
 };
-
-export default RESPONSE;

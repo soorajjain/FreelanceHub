@@ -1,19 +1,15 @@
-import express, { response } from "express";
+import express, { Router } from "express";
+import userModel from "../../model/userModel.js";
 const router = express.Router();
-
-import initJobTakerModel from "../../../model/jobTaker.js";
-
-import RESPONSE from "../../../config/global.js";
+import { RESPONSE } from "../../config/global.js";
 import validator from "validator";
-import constants from "../../../config/constants.js";
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-dotenv.config();
+import bcrypt from "bcrypt";
+
+import constants from "../../config/constants.js";
 
 router.post("/", async (req, res) => {
   try {
-    const jobTakerModel = await initJobTakerModel();
     const { email, password } = req.body;
     let response;
 
@@ -21,7 +17,7 @@ router.post("/", async (req, res) => {
       response = RESPONSE.MANDATORY_PARAMS;
       return res.json({
         code: response.code,
-        msg: "email " + response.msg,
+        msg: "mail" + response.msg,
       });
     }
 
@@ -29,7 +25,7 @@ router.post("/", async (req, res) => {
       response = RESPONSE.MANDATORY_PARAMS;
       return res.json({
         code: response.code,
-        msg: "password " + response.msg,
+        msg: "password" + response.msg,
       });
     }
 
@@ -42,16 +38,18 @@ router.post("/", async (req, res) => {
       });
     }
 
-    const data = await jobTakerModel.findOne({
+    const user = await userModel.findOne({
       is_active: constants.STATE.ACTIVE,
       email: email,
     });
 
-    if (data && (await bcrypt.compare(password, data.password))) {
+    if (user && (await bcrypt.compare(password, user.password))) {
       const token = jwt.sign(
         {
-          id: data._id,
-          name: data.email,
+          id: user._id,
+          name: user.user_name,
+          email: user.email,
+          role: user.role,
         },
         process.env.TOKENKEY
       );
@@ -69,15 +67,10 @@ router.post("/", async (req, res) => {
         msg: "login credentials" + response.msg,
       });
     }
-
     return res.json(RESPONSE.SUCCESS);
   } catch (error) {
     console.log(error);
-    response = RESPONSE.UNKNOWN_ERROR;
-    return res.json({
-      code: response.code,
-      msg: "Login page " + response.msg,
-    });
+    return res.json(RESPONSE.UNKNOWN_ERROR);
   }
 });
 

@@ -1,14 +1,10 @@
-import { Router } from "express";
-import jobGiverRegister from "./jobGiver/jobGiverRegister.js";
-import jobGiverLogin from "./jobGiver/jobGiverLogin.js";
-import jobTakerRegister from "./jobTaker/jobTakerRegister.js";
-import jobTakerLogin from "./jobTaker/jobTakerLogin.js";
+import express from "express";
+const router = express.Router();
 
-const router = Router();
+import register from "./register.js";
+import login from "./login.js";
 
-router.use("/jobGiverRegister", jobGiverRegister);
-router.use("/jobGiverLogin", jobGiverLogin);
-router.use("/jobTakerRegister", jobTakerRegister);
-router.use("/jobTakerLogin", jobTakerLogin);
+router.use("/register", register);
+router.use("/login", login);
 
 export default router;
