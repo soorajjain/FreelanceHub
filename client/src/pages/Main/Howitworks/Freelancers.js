@@ -70,7 +70,7 @@ function Freelancers() {
           <div className="font-serif font-bold text-[28px] md:text-[40px] md:text-left mt-3">
             Get Paid
           </div>
-          <div className="text-[16px] md:text-[20px] md:text-[20px] md:text-[20px] pt-4 w-[300px] text-center md:text-left">
+          <div className="text-[16px] md:text-[20px] pt-4 w-[300px] text-center md:text-left">
             Get paid for the work you do in a timely manner through our secure
             payment system.
           </div>

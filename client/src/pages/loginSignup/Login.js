@@ -1,4 +1,6 @@
 import * as React from "react";
+import { jwtDecode } from "jwt-decode";
+
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -15,12 +17,12 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import showToast from "../showToast";
+import showToast from "./showToast";
 import axios from "axios";
 
 const defaultTheme = createTheme();
 
-export default function LoginJobTaker() {
+export default function LoginJobGiver() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -29,14 +31,36 @@ export default function LoginJobTaker() {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3002/api/auth/jobTakerLogin", { email, password })
+      .post("http://localhost:3002/api/auth/login", { email, password })
       .then((res) => {
         showToast(res.data.code);
+
         if (res.data.code === "400") {
-          setTimeout(() => {
-            navigate("/find_freelancers");
-          }, 1000);
+          const { token } = res.data;
+          //   console.log(token);
+
+          if (token) {
+            // Save token to localStorage or state
+            localStorage.setItem("token", token);
+
+            // Decode token to get user role
+            const decoded = jwtDecode(token);
+            // console.log(decoded);
+            const { role } = decoded;
+            // console.log(role);
+
+            // Navigate based on role
+            if (role === "freelancer") {
+              navigate("/find_jobs");
+            } else if (role === "client") {
+              navigate("/post_job");
+            }
+          }
         }
+
+        //   setTimeout(() => {
+        //     navigate("/find_freelancers");
+        //   }, 1000);
       })
       .catch((err) => {
         console.log(err);
@@ -150,7 +174,7 @@ export default function LoginJobTaker() {
                 <Grid item xs></Grid>
                 <Grid item>
                   <Link
-                    to="/signupJobGiver"
+                    to="/register"
                     variant="body2"
                     sx={{ color: "#023246" }}
                   >

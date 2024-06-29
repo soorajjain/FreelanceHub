@@ -11,7 +11,7 @@ router.post("/", async (req, res) => {
   try {
     let response;
 
-    const { user_name, email, role, password, image } = req.body;
+    const { user_name, role, email, password, image } = req.body;
 
     console.log(user_name);
 
@@ -30,13 +30,13 @@ router.post("/", async (req, res) => {
       });
     }
 
-    if (!role || role == "") {
-      response = RESPONSE.MANDATORY_PARAMS;
-      return res.json({
-        code: response.code,
-        msg: "role" + response.msg,
-      });
-    }
+    // if (!role || role == "") {
+    //   response = RESPONSE.MANDATORY_PARAMS;
+    //   return res.json({
+    //     code: response.code,
+    //     msg: "role" + response.msg,
+    //   });
+    // }
     if (!password || password == "") {
       response = RESPONSE.MANDATORY_PARAMS;
       return res.json({

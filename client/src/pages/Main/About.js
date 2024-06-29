@@ -3,11 +3,11 @@ import React from "react";
 function About() {
   return (
     <div className="">
-      <div className="w-full border-t-[1px] border-t-[#605d5d]" id="about"></div>
-        <div className="howitwork max-w-[1170px] mx-auto text-[#141C3A] flex justify-center items-center mt-8 flex-col mt-[50px]">
+
+        <div className="howitwork max-w-[1170px] mx-auto text-[#141C3A] flex justify-center items-center mt-8 flex-col ">
           <div className="flex flex-col gap-5 sm:mx-12  md:mx-12 lg:mx-auto mx-6 justify-center items-center">
             <h1 className="text-[30px] font-bold text-center">About Us</h1>
-            <h3 className="text-[16px] md:text-[20px] md:text-[20px] text-center w-[90%]">
+            <h3 className="text-[16px] md:text-[20px] ] text-center w-[90%]">
               Welcome to Freelance HUB – your premier destination for connecting
               talented freelancers with innovative projects worldwide. Our
               mission is to revolutionize the way businesses and freelancers
@@ -18,7 +18,7 @@ function About() {
             <h1 className="text-[28px] font-bold text-center mt-10">
               Who are we
             </h1>
-            <h3 className="text-[16px] md:text-[20px] md:text-[20px] text-center w-[90%]">
+            <h3 className="text-[16px] md:text-[20px]  text-center w-[90%]">
               At Freelance HUB, we believe in the power of flexibility and the
               freedom to work on your terms. Founded in [Year], we have grown
               into a vibrant community of skilled professionals and
@@ -29,7 +29,7 @@ function About() {
             <h1 className="text-[28px] font-bold text-center mt-10">
               Our Mission
             </h1>
-            <h3 className="text-[16px] md:text-[20px] md:text-[20px] text-center w-[90%] ">
+            <h3 className="text-[16px] md:text-[20px] text-center w-[90%] ">
               Our mission is to empower freelancers to showcase their skills and
               help businesses find the perfect talent for their projects. We
               strive to create an ecosystem where both freelancers and employers

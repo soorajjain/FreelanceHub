@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import logo from "../../assets/Freelance-Hub-logo.png";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 import Box from "@mui/material/Box";
 
 import Menu from "@mui/material/Menu";
@@ -14,7 +16,9 @@ import LoginIcon from "@mui/icons-material/Login";
 import InfoIcon from "@mui/icons-material/Info";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 
-function Navbar() {
+const Navbar = ({ isLoggedIn, onLogout }) => {
+  const navigate = useNavigate();
+
   const handleScroll = (event) => {
     event.preventDefault();
     const targetId = event.currentTarget.getAttribute("href").substring(1);
@@ -26,6 +30,11 @@ function Navbar() {
         behavior: "smooth",
       });
     }
+  };
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    onLogout();
+    navigate("/");
   };
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -44,7 +53,7 @@ function Navbar() {
 
   return (
     <div id="home" className="w-full bg-[#F6F6F6]">
-      <nav className="Navbar max-w-[1170px] text-[#141C3A] lg:mx-auto flex justify-between py-4 sm:py-8 bg-[#F6F6F6] mx-3  bg-[#F6F6F6]">
+      <nav className="Navbar max-w-[1170px] text-[#141C3A] lg:mx-auto flex justify-between py-4 sm:py-8 bg-[#F6F6F6] mx-3 ">
         <div className="flex gap-10 items-center">
           <Link to="/" className="px-1">
             <img src={logo} className="sm:w-[200px] w-[150px]" alt="logo" />
@@ -66,12 +75,21 @@ function Navbar() {
           </a>
         </div>
         <div className="flex gap-6 items-center mx-4">
-          <Link
-            to="/redirect"
-            className="border-[2px] border-[#023246]  hover:bg-[#023246] hover:text-[#FFFFFF] rounded-3xl md:p-2 md:px-6 p-2 px-3 hidden sm:block"
-          >
-            Sign Up
-          </Link>
+          {isLoggedIn ? (
+            <button
+              className="border-[2px] border-[#023246]  hover:bg-[#023246] hover:text-[#FFFFFF] rounded-3xl md:p-2 md:px-6 p-2 px-3 hidden sm:block"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              to="/register"
+              className="border-[2px] border-[#023246]  hover:bg-[#023246] hover:text-[#FFFFFF] rounded-3xl md:p-2 md:px-6 p-2 px-3 hidden sm:block"
+            >
+              Sign Up
+            </Link>
+          )}
           <div className="sm:hidden">
             <React.Fragment>
               <Box
@@ -148,7 +166,7 @@ function Navbar() {
 
                 <Divider />
 
-                <Link to="/redirect">
+                <Link to="/register">
                   <MenuItem onClick={handleClose}>
                     <ListItemIcon>
                       <LoginIcon fontSize="small" />
@@ -163,6 +181,6 @@ function Navbar() {
       </nav>
     </div>
   );
-}
+};
 
 export default Navbar;

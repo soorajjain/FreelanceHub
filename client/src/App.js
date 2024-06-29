@@ -2,20 +2,22 @@ import React from "react";
 import Home from "./pages/Main/Home";
 import FindFreelancers from "./pages/clientJobGiver/FindFreelancers";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import SignupJobGiver from "./pages/loginSignup/jobGiver/SignupJobGiver";
-import LoginJobGiver from "./pages/loginSignup/jobGiver/LoginJobGiver";
-
-import SignupJobTaker from "./pages/loginSignup/jobTaker/SignupJobTaker";
-import LoginJobTaker from "./pages/loginSignup/jobTaker/LoginJobTaker";
+import Login from "./pages/loginSignup/Login";
+import SignUp from "./pages/loginSignup/SignUp";
 
 import Navfree from "./pages/freelancersJobTakers/NavbarFreelancers";
 // import Navclient from "./pages/clientJobGiver/NavbarClient";
 
 import FindJobs from "./pages/freelancersJobTakers/FindJobs";
+import PostJob from "./pages/clientJobGiver/PostJob";
 import Layout from "./components/Layouts/Layout";
-import Redirect from "./pages/loginSignup/Redirect";
 
 function App() {
+  // const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+
+  // const handleLogout = () => {
+  //   setIsLoggedIn(false);
+  // };
   return (
     <>
       <BrowserRouter>
@@ -28,12 +30,9 @@ function App() {
               </Layout>
             }
           />
-          <Route path="/redirect" element={<Redirect />} />
-          <Route path="/signupJobGiver" element={<SignupJobGiver />} />
-          <Route path="/loginJobGiver" element={<LoginJobGiver />} />
 
-          <Route path="/signupJobTaker" element={<SignupJobTaker />} />
-          <Route path="/loginJobTaker" element={<LoginJobTaker />} />
+          <Route path="/register" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
 
           {/* trials */}
 
@@ -46,6 +45,14 @@ function App() {
             element={
               <Layout>
                 <FindFreelancers />
+              </Layout>
+            }
+          />
+          <Route
+            path="/post_job"
+            element={
+              <Layout>
+                <PostJob />
               </Layout>
             }
           />

@@ -30,7 +30,7 @@ const userSchema = new Schema({
   jobPostings: [
     {
       type: Schema.Types.ObjectId,
-      ref: "JobPosting",
+      ref: "jobPostingModel",
     },
   ],
   is_active: {

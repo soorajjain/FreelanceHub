@@ -7,7 +7,7 @@ function Howitwork() {
   const [toggle, setToggle] = useState("Freelancers");
   return (
     <div id="how-it-works"  className="bg-[#F6F6F6]" >
-      <div className="w-[100%] border-t-[1px] border-t-[#605d5d] py-[5px] text-[#023246] ">
+
         <div className="howitwork max-w-[1170px] mx-auto text-[#023246] flex justify-center items-center mt-8 flex-col">
           <div className="flex flex-col gap-5 md:gap-10 sm:mx-12 md:mx-12 lg:mx-auto mx-6 ">
             <h1 className="text-[28px] md:text-[40px] font-bold text-center font-serif ">
@@ -47,7 +47,7 @@ function Howitwork() {
         </div>
         <div>{toggle === "Employers" ? <Employers /> : <Freelancers />}</div>
       </div>
-    </div>
+
   );
 }
 

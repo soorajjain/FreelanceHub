@@ -58,7 +58,7 @@ router.post("/", async (req, res) => {
       return res.json({
         code: response.code,
         msg: response.msg,
-        data: token,
+        token: token,
       });
     } else {
       response = RESPONSE.INVALID_DATA;

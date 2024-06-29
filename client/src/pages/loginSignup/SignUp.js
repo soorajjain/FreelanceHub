@@ -15,33 +15,36 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import showToast from "../showToast";
-
-// TODO remove, this demo shouldn't need to reset the theme.
+import showToast from "./showToast";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const defaultTheme = createTheme();
 
-export default function SignupJobTaker() {
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
+export default function SignUp() {
+  const [user_name, setName] = useState("");
+  const [role, setRole] = useState("freelancer");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  console.log(name, email, password, phone);
+  console.log(user_name, role, email, password);
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-      .post("http://localhost:3002/api/auth/jobTakerRegister", {
-        name,
-        phone,
+      .post("http://localhost:3002/api/auth/register", {
+        user_name,
+        role,
         email,
         password,
       })
       .then((res) => {
         showToast(res.data.code);
+        console.log(res);
         if (res.data.code === "400") {
           setTimeout(() => {
-            navigate("/loginJobTaker");
+            navigate("/login");
           }, 2000);
         }
       })
@@ -86,21 +89,21 @@ export default function SignupJobTaker() {
                     onChange={(e) => setName(e.target.value)}
                     autoFocus
                     InputProps={{
-                      style: { color: "black" },
+                      style: { color: "#023246" },
                     }}
                     InputLabelProps={{
-                      style: { color: "black" },
+                      style: { color: "#023246" },
                     }}
                     sx={{
                       "& .MuiOutlinedInput-root": {
                         "& fieldset": {
-                          borderColor: "black",
+                          borderColor: "#023246",
                         },
                         "&:hover fieldset": {
-                          borderColor: "black",
+                          borderColor: "#023246",
                         },
                         "&.Mui-focused fieldset": {
-                          borderColor: "black",
+                          borderColor: "#023246",
                         },
                       },
                     }}
@@ -116,55 +119,61 @@ export default function SignupJobTaker() {
                     autoComplete="email"
                     onChange={(e) => setEmail(e.target.value)}
                     InputProps={{
-                      style: { color: "black" },
+                      style: { color: "#023246" },
                     }}
                     InputLabelProps={{
-                      style: { color: "black" },
+                      style: { color: "#023246" },
                     }}
                     sx={{
                       "& .MuiOutlinedInput-root": {
                         "& fieldset": {
-                          borderColor: "black",
+                          borderColor: "#023246",
                         },
                         "&:hover fieldset": {
-                          borderColor: "black",
+                          borderColor: "#023246",
                         },
                         "&.Mui-focused fieldset": {
-                          borderColor: "black",
+                          borderColor: "#023246",
                         },
                       },
                     }}
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField
-                    required
+                  <FormControl
                     fullWidth
-                    id="phone"
-                    label="Phone Number"
-                    name="phone"
-                    autoComplete="phone-number"
-                    onChange={(e) => setPhone(e.target.value)}
-                    InputProps={{
-                      style: { color: "black" },
+                    inputprops={{
+                      style: { color: "#023246" },
                     }}
-                    InputLabelProps={{
-                      style: { color: "black" },
+                    inputlabelprops={{
+                      style: { color: "#023246" },
                     }}
                     sx={{
                       "& .MuiOutlinedInput-root": {
                         "& fieldset": {
-                          borderColor: "black",
+                          borderColor: "#023246",
                         },
                         "&:hover fieldset": {
-                          borderColor: "black",
+                          borderColor: "#023246",
                         },
                         "&.Mui-focused fieldset": {
-                          borderColor: "black",
+                          borderColor: "#023246",
                         },
                       },
                     }}
-                  />
+                  >
+                    <InputLabel id="demo-simple-select-label">Role</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={role}
+                      label="Role"
+                      onChange={(e) => setRole(e.target.value)}
+                    >
+                      <MenuItem value={"client"}>Client</MenuItem>
+                      <MenuItem value={"freelancer"}>Freelancer</MenuItem>
+                    </Select>
+                  </FormControl>
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
@@ -177,21 +186,21 @@ export default function SignupJobTaker() {
                     autoComplete="new-password"
                     onChange={(e) => setPassword(e.target.value)}
                     InputProps={{
-                      style: { color: "black" },
+                      style: { color: "#023246" },
                     }}
                     InputLabelProps={{
-                      style: { color: "black" },
+                      style: { color: "#023246" },
                     }}
                     sx={{
                       "& .MuiOutlinedInput-root": {
                         "& fieldset": {
-                          borderColor: "black",
+                          borderColor: "#023246",
                         },
                         "&:hover fieldset": {
-                          borderColor: "black",
+                          borderColor: "#023246",
                         },
                         "&.Mui-focused fieldset": {
-                          borderColor: "black",
+                          borderColor: "#023246",
                         },
                       },
                     }}
@@ -230,7 +239,7 @@ export default function SignupJobTaker() {
               />
               <Grid container justifyContent="flex-end">
                 <Grid item>
-                  <Link to="/loginJobGiver" variant="body2">
+                  <Link to="/login" variant="body2">
                     Already have an account? Sign in
                   </Link>
                 </Grid>
