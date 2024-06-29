@@ -13,24 +13,20 @@ function Redirect() {
         <div className="flex flex-col sm:flex-row gap-7 justify-center items-center">
           <Link
             to="/signupJobGiver"
-            className="sm:h-[200px] sm:w-[300px] h-[80%] w-[90%] bg-transparent flex items-center justify-center text-2xl text-left border rounded-sm hover:bg-[#141C3A] hover:text-white border-[#141C3A] "
+            className="sm:h-[200px] sm:w-[300px] h-[100px] w-[300px]   bg-transparent flex items-center justify-center text-xl sm:text-2xl text-left border rounded-sm hover:bg-[#141C3A] hover:text-white border-[#141C3A] "
           >
             <h1>
               SignUp as <br />
-              <span className="font-bold text-[30px]">
-                JOBGIVER
-              </span>
+              <span className="font-bold text-[26px] sm:text-[30px]">JOBGIVER</span>
             </h1>
           </Link>
           <Link
             to="/SignupJobTaker"
-            className="sm:h-[200px] sm:w-[300px] h-[80%] w-[90%]  bg-transparent flex items-center justify-center text-2xl text-left border border-[#141C3A] rounded-sm hover:bg-[#141C3A] hover:text-white"
+            className="sm:h-[200px] sm:w-[300px] h-[100px] w-[300px]   bg-transparent flex items-center justify-center text-xl sm:text-2xl text-left border border-[#141C3A] rounded-sm hover:bg-[#141C3A] hover:text-white"
           >
             <h1>
               SignUp as <br />
-              <span className="font-bold text-[30px]">
-                JOBTAKER
-              </span>
+              <span className="font-bold text-[26px] sm:text-[30px]">JOBTAKER</span>
             </h1>
           </Link>
         </div>
