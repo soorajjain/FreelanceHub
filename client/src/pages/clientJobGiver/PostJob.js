@@ -16,7 +16,7 @@ const PostJob = () => {
   });
 
   const [skills, setSkills] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState([]); //to get multiple data we use array to store
 
   useEffect(() => {
     // Fetch skills from backend
