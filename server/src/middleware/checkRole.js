@@ -1,9 +1,15 @@
-const checkRole = (req, res, next) => {
+import { RESPONSE } from "../config/global";
 
+const checkRole = (req, res, next) => {
+  let response;
   if (req.user && req.user.role === "client") {
     next(); // Allow access to the route
   } else {
-    return res.status(403).json({ message: "Unauthorized" });
+    response = RESPONSE.UNAUTH_ACCESS;
+    return res.json({
+      code: response.code,
+      msg: response.msg,
+    });
   }
 };
 

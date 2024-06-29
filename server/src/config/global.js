@@ -31,4 +31,8 @@ export const RESPONSE = {
     code: "204",
     msg: " access denied",
   },
+  UNAUTH_ACCESS: {
+    code: "205",
+    msg: " unauthorized access",
+  },
 };
