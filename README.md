@@ -8,7 +8,7 @@ create detailed profiles, post and apply for jobs, manage contracts, and track p
 milestones. Freelance Hub aims to enhance the freelance marketplace experience by
 providing a comprehensive and integrated solution for all stakeholders.
 
-## PLATFORM/TOOLS/LANGUAGE TO BE USED
+## PLATFORM/TOOLS/LANGUAGE USING
 
 - Front End : React JS
 - Back End : Node JS, Express JS
