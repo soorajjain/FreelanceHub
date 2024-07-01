@@ -1,4 +1,4 @@
-import { RESPONSE } from "../config/global";
+import { RESPONSE } from "../config/global.js";
 
 const checkRole = (req, res, next) => {
   let response;

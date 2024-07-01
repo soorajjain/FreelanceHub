@@ -15,7 +15,7 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  image: {
+  profile_image: {
     type: [String],
     required: true,
   },
@@ -25,8 +25,7 @@ const userSchema = new Schema({
     required: true,
   },
   skills: [String],
-  portfolio: [String],
-  company: [String],
+  about: [String],
   jobPostings: [
     {
       type: Schema.Types.ObjectId,

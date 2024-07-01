@@ -35,4 +35,8 @@ export const RESPONSE = {
     code: "205",
     msg: " unauthorized access",
   },
+  ERR_GET: {
+    code: "206",
+    msg: " Error in getting Data",
+  },
 };

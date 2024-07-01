@@ -1,4 +1,4 @@
-import express, { Router } from "express";
+import express, { Router, response } from "express";
 import skillsModel from "../../model/skillsModel.js";
 const router = express.Router();
 import { RESPONSE } from "../../config/global.js";
@@ -42,11 +42,16 @@ router.post("/", async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
+    let response;
     const skills = await skillsModel.find();
     return res.json(skills);
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error: "Internal server error" });
+    response = RESPONSE.ERR_GET;
+    return res.json({
+      code: response.code,
+      msg: "skill model" + response.msg,
+    });
   }
 });
 

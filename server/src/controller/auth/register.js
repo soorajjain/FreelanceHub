@@ -85,4 +85,18 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.get("/", async (req, res) => {
+  let response;
+  try {
+    let user = await userModel.find();
+    return res.json(user);
+  } catch (error) {
+    response = RESPONSE.ERR_GET;
+    return res.json({
+      code: response.code,
+      msg: " get user  " + response.msg,
+    });
+  }
+});
+
 export default router;

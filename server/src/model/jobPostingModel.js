@@ -15,7 +15,6 @@ const jobPostingSchema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "skillsModel",
-        
       },
     ],
     category: {
@@ -33,6 +32,10 @@ const jobPostingSchema = new mongoose.Schema(
     client: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "userModel",
+    },
+    banner_image: {
+      type: [String],
+      required: "true",
     },
     applications: [
       {

@@ -1,5 +1,6 @@
-import express from "express";
+import express, { response } from "express";
 import { Router } from "express";
+import mongoose from "mongoose";
 
 const router = express.Router();
 import { RESPONSE } from "../../config/global.js";
@@ -33,6 +34,14 @@ router.post("/", authenticate, checkRole, async (req, res) => {
     //   deadline,
     //   client
     // );
+
+    if (!category || !mongoose.Types.ObjectId.isValid(category)) {
+      response = RESPONSE.NOT_FOUND;
+      return res.json({
+        code: response.code,
+        msg: "Invalid Category ID",
+      });
+    }
 
     // Fetching skills and category data from database
     const skills = await skillsModel.find({ _id: { $in: requirements } });
@@ -105,6 +114,20 @@ router.post("/", authenticate, checkRole, async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.json(RESPONSE.UNKNOWN_ERROR);
+  }
+});
+
+router.get("/", async (req, res) => {
+  let response;
+  try {
+    const jobs = await jobPostingsModel.find();
+    return res.json(jobs);
+  } catch (error) {
+    response = RESPONSE.ERR_GET;
+    return res.json({
+      code: response.code,
+      msg: "job post" + response.msg,
+    });
   }
 });
 

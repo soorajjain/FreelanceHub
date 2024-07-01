@@ -1,4 +1,4 @@
-import express, { Router } from "express";
+import express, { Router, response } from "express";
 import categoryModel from "../../model/categoryModel.js";
 const router = express.Router();
 import { RESPONSE } from "../../config/global.js";
@@ -42,11 +42,16 @@ router.post("/", async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
+    let response;
     const categories = await categoryModel.find();
     return res.json(categories);
   } catch (error) {
+    response = RESPONSE.ERR_GET;
     console.log(error);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.json({
+      code: response.code,
+      msg: response.msg,
+    });
   }
 });
 
