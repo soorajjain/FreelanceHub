@@ -6,17 +6,34 @@ import "react-toastify/dist/ReactToastify.css";
 
 const PostJob = () => {
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
+    title: " ",
+    description: " ",
     requirements: [], // Now an array of skill IDs
-    category: "",
-    budget: "",
-    deadline: "",
-    client: "",
+    category: " ",
+    budget: " ",
+    deadline: " ",
+    client: " ",
   });
 
   const [skills, setSkills] = useState([]);
   const [categories, setCategories] = useState([]); //to get multiple data we use array to store
+  const [jobs, setJobs] = useState([]);
+  const [user, setUsers] = useState([]);
+  console.log(user);
+
+  const fetchJobs = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3002/api/clients/job_posting"
+      );
+      const sortedJobs = response.data.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+      setJobs(sortedJobs);
+    } catch (error) {
+      console.log("Error while fetching jobs");
+    }
+  };
 
   useEffect(() => {
     // Fetch skills from backend
@@ -44,8 +61,29 @@ const PostJob = () => {
       }
     };
 
+    const fetchJobs = async () => {
+      try {
+        await axios
+          .get("http://localhost:3002/api/clients/job_posting")
+          .then((response) => setJobs(response.data));
+      } catch (error) {
+        console.log("Error while fetching jobs");
+      }
+    };
+
+    const fetchClient = async () => {
+      try {
+        await axios
+          .get("http://localhost:3002/api/auth/register")
+          .then((response) => setUsers(response.data));
+      } catch (error) {
+        console.log("Error while fetching user");
+      }
+    };
+
     fetchSkills();
     fetchCategories();
+    fetchClient();
   }, []);
 
   const handleChange = (e) => {
@@ -72,7 +110,7 @@ const PostJob = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem("token"); // Assuming the token is stored in localStorage
+      const token = localStorage.getItem("token");
       const response = await axios.post(
         "http://localhost:3002/api/clients/job_posting",
         formData,
@@ -82,6 +120,8 @@ const PostJob = () => {
           },
         }
       );
+
+      console.log(response.data);
 
       toast(response.data.msg, {
         position: "top-right",
@@ -93,10 +133,29 @@ const PostJob = () => {
         progress: undefined,
         theme: "light",
       });
-      console.log(response.data);
+
+      await fetchJobs();
+
+      // Reset form data after successful submission
+      setFormData({
+        title: "",
+        description: "",
+        requirements: [],
+        category: "",
+        budget: "",
+        deadline: "",
+        client: "",
+      });
     } catch (error) {
       console.error("Error creating job posting:", error);
     }
+  };
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${day}-${month}-${year}`;
   };
 
   return (
@@ -186,7 +245,7 @@ const PostJob = () => {
               Skills Required
             </label>
 
-            <div className="grid gap-2 items-center sm:grid-cols-4 grid-cols-2  w-full">
+            <div className="grid gap-2 items-center sm:grid-cols-4 grid-cols-2   w-full">
               {skills &&
                 skills.map((skill) => (
                   <label key={skill._id} className="flex items-center">
@@ -198,7 +257,7 @@ const PostJob = () => {
                       onChange={handleCheckboxChange}
                       className="w-4 h-4 text-[#141C3A] bg-gray-100 rounded focus:ring-[#141C3A]"
                     />
-                    <span className="ml-2">{skill.skill_name}</span>
+                    <span className="ml-2 text-[14px]">{skill.skill_name}</span>
                   </label>
                 ))}
             </div>
@@ -223,7 +282,8 @@ const PostJob = () => {
           <div className="flex justify-center items-center">
             <button
               type="submit"
-              className="text-white bg-[#141C3A] focus:ring-4 focus:outline-none focus:text-[#141C3A] font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[40%] sm:w-[30%]"
+              className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A]
+              hover:text-[#141C3A] hover:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[40%] sm:w-[30%]"
             >
               Post Job
             </button>
@@ -242,6 +302,89 @@ const PostJob = () => {
           theme="dark"
         />
       </div>
+
+      {/* get posted jobs started here */}
+      {/* job posting */}
+
+      {jobs &&
+        jobs.map((job) => {
+          const jobSkills = skills.filter((skill) =>
+            job.requirements.includes(skill._id)
+          );
+          const category = categories.map((cat) => {
+            if (job.category === cat._id) {
+              return cat.category_name;
+            }
+          });
+          const client =
+            user &&
+            user.map((client) => {
+              if (client._id === job.client) {
+                return client.user_name;
+              }
+            });
+
+          return (
+            <div
+              className="job_card mx-auto  p-5 w-[80%] border border-black mt-10 mb-10 rounded-sm"
+              key={job._id}
+            >
+              <div className="flex justify-center items-start w-full">
+                <h1 className="category mb-8 text-[18px]">
+                  Category : {category}
+                </h1>
+              </div>
+              <div className="main_card grid sm:grid-cols-[40%_auto]">
+                <div className="banner bg-gray-400 h-[250px] mt-10">
+                  image appears here
+                </div>
+                <div className="main_info grid sm:grid-cols-2  ml-5">
+                  <div className="info-1 flex flex-col gap-10">
+                    <h1 className="title text-center text-[24px] font-bold">
+                      {job.title}
+                    </h1>
+                    <p className="description text-left text-[16px] w-full">
+                      {job.description}
+                    </p>
+                  </div>
+                  <div className="info-2 info-1 flex flex-col gap-10 mt-16">
+                    <h2 className="text-center text-[18px] ">
+                      <span className="font-bold"> Deadline </span>
+                      <br />
+
+                      {formatDate(job.deadline)}
+                    </h2>
+                    <h2 className="budget text-center text-[18px] ">
+                      <span className="font-bold"> Budget </span>
+                      <br />
+                      {job.budget}
+                    </h2>
+                    <h2 className="req_skills text-center text-[18px]">
+                      <span className="font-bold"> Skills required </span>
+                      <br />
+
+                      {jobSkills.map((skill) => skill.skill_name).join(", ")}
+                    </h2>
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-[18px] flex flex-col justify-center items-center mt-10">
+                <h1 className="font-bold mb-2">Job Posted by</h1>
+                <div className="flex w-fit border border-black mx-auto justify-center items-center text-[18px]">
+                  <div className="profile_pic bg-gray-400 w-[50%] h-[50px]">
+                    Profile
+                  </div>
+                  <h1 className="name text-[18px] px-10">
+                    <span>{client}</span>
+                  </h1>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+
+      {/* get posted jobs ends here */}
     </>
   );
 };
