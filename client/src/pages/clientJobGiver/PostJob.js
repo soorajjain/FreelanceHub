@@ -34,7 +34,7 @@ const PostJob = () => {
       console.log("Error while fetching jobs");
     }
   };
-
+  fetchJobs();
   useEffect(() => {
     // Fetch skills from backend
     const fetchSkills = async () => {
@@ -325,59 +325,40 @@ const PostJob = () => {
             });
 
           return (
-            <div
-              className="job_card mx-auto  p-5 w-[80%] border border-black mt-10 mb-10 rounded-sm"
-              key={job._id}
-            >
-              <div className="flex justify-center items-start w-full">
-                <h1 className="category mb-8 text-[18px]">
-                  Category : {category}
-                </h1>
-              </div>
-              <div className="main_card grid sm:grid-cols-[40%_auto]">
-                <div className="banner bg-gray-400 h-[250px] mt-10">
-                  image appears here
-                </div>
-                <div className="main_info grid sm:grid-cols-2  ml-5">
-                  <div className="info-1 flex flex-col gap-10">
-                    <h1 className="title text-center text-[24px] font-bold">
-                      {job.title}
-                    </h1>
-                    <p className="description text-left text-[16px] w-full">
-                      {job.description}
-                    </p>
-                  </div>
-                  <div className="info-2 info-1 flex flex-col gap-10 mt-16">
-                    <h2 className="text-center text-[18px] ">
-                      <span className="font-bold"> Deadline </span>
-                      <br />
+            <div class="m-5">
+              <div class="group mx-2 mt-10 grid max-w-screen-md grid-cols-12 space-x-8 overflow-hidden rounded-lg border py-8 text-gray-700 shadow transition hover:shadow-lg sm:mx-auto">
+                <div class="col-span-11 flex flex-col pr-8 text-left sm:pl-4 mx-5">
+                  <h3 class="text-sm text-gray-600">Category : {category}</h3>
+                  <a
+                    href="#"
+                    class="mb-3 overflow-hidden pr-7 text-lg font-semibold sm:text-xl"
+                  >
+                    {job.title}
+                  </a>
+                  <h3 class="text-sm text-gray-600">Requirements :</h3>
+                  <p class="overflow-hidden pr-7 text-sm">{job.description}</p>
 
-                      {formatDate(job.deadline)}
-                    </h2>
-                    <h2 className="budget text-center text-[18px] ">
-                      <span className="font-bold"> Budget </span>
-                      <br />
-                      {job.budget}
-                    </h2>
-                    <h2 className="req_skills text-center text-[18px]">
-                      <span className="font-bold"> Skills required </span>
-                      <br />
+                  <div class="mt-5 flex flex-col space-y-3 text-sm font-medium text-gray-500 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-2">
+                    <div class="">
+                      Deadline :
+                      <span class="ml-2 mr-3 rounded-full bg-green-100 px-2 py-0.5 text-green-900">
+                        {formatDate(job.deadline)}
+                      </span>
+                    </div>
 
-                      {jobSkills.map((skill) => skill.skill_name).join(", ")}
-                    </h2>
+                    <div class="">
+                      Budget:
+                      <span class="ml-2 mr-3 rounded-full bg-blue-100 px-2 py-0.5 text-blue-900">
+                        {job.budget}.Rs
+                      </span>
+                    </div>
+                    <div class="">
+                      Skills :
+                      <span class="ml-2 mr-3 rounded-full bg-green-100 px-2 py-0.5 text-green-900">
+                        {jobSkills.map((skill) => skill.skill_name).join(", ")}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </div>
-
-              <div className="text-[18px] flex flex-col justify-center items-center mt-10">
-                <h1 className="font-bold mb-2">Job Posted by</h1>
-                <div className="flex w-fit border border-black mx-auto justify-center items-center text-[18px]">
-                  <div className="profile_pic bg-gray-400 w-[50%] h-[50px]">
-                    Profile
-                  </div>
-                  <h1 className="name text-[18px] px-10">
-                    <span>{client}</span>
-                  </h1>
                 </div>
               </div>
             </div>
