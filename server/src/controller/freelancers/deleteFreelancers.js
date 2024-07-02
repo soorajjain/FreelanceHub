@@ -10,15 +10,15 @@ import userModel from "../../model/userModel.js";
 import mongoose from "mongoose";
 
 //this ? allows that id is optional
-router.put("/:id", authenticate, async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
-    const client_id = req.params.id;
+    const freelancer_id = req.params.id;
 
     let response;
     //take the id thats there in put method in the top -/:id?
 
     const isValidId = await userModel.findOne({
-      _id: client_id,
+      _id: freelancer_id,
       is_active: constants.STATE.ACTIVE,
     });
     if (!isValidId) {
@@ -28,7 +28,7 @@ router.put("/:id", authenticate, async (req, res) => {
         msg: "ID" + response.msg,
       });
     }
-    if (!mongoose.Types.ObjectId.isValid(client_id)) {
+    if (!mongoose.Types.ObjectId.isValid(freelancer_id)) {
       return res.json({
         code: RESPONSE.INVALID_DATA.code,
         msg: "Invalid ID format",
@@ -37,7 +37,7 @@ router.put("/:id", authenticate, async (req, res) => {
 
     await userModel.findOneAndUpdate(
       {
-        _id: client_id,
+        _id: freelancer_id,
         is_active: constants.STATE.ACTIVE,
       },
       { is_active: constants.STATE.INACTIVE }
@@ -54,7 +54,7 @@ router.put("/:id", authenticate, async (req, res) => {
 
     return res.json(RESPONSE.SUCCESS);
   } catch (error) {
-    console.log("edit client delete page : ", error);
+    console.log("edit freelancer delete page : ", error);
     return res.json(RESPONSE.UNKNOWN_ERROR);
   }
 });

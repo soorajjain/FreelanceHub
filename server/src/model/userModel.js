@@ -15,10 +15,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  profile_image: {
-    type: [String],
-    required: true,
-  },
+  // profile_image: {
+  //   type: [String],
+  //   required: true,
+  // },
   role: {
     type: String,
     enum: ["freelancer", "client"],
@@ -26,6 +26,8 @@ const userSchema = new Schema({
   },
   skills: [String],
   about: [String],
+  portfolio: [String],
+
   jobPostings: [
     {
       type: Schema.Types.ObjectId,
