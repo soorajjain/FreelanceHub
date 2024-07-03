@@ -5,17 +5,17 @@ const projectSchema = new mongoose.Schema(
   {
     jobPosting: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "jobPostingModel",
+      ref: "job_postings",
       required: true,
     },
     client: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "userModel",
+      ref: "user_models",
       required: true,
     },
     freelancer: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "userModel",
+      ref: "user_models",
       required: true,
     },
     milestones: [
@@ -27,7 +27,6 @@ const projectSchema = new mongoose.Schema(
     ],
     status: {
       type: String,
-      enum: ["not started", "in progress", "completed", "cancelled"],
       default: "not started",
     },
     paymentStatus: {

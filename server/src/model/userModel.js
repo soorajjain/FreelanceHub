@@ -31,7 +31,7 @@ const userSchema = new Schema({
   jobPostings: [
     {
       type: Schema.Types.ObjectId,
-      ref: "jobPostingModel",
+      ref: "job_postings",
     },
   ],
   is_active: {
@@ -43,7 +43,7 @@ const userSchema = new Schema({
 // Create the model
 let initUserModel = null;
 try {
-  initUserModel = mongoose.model("User_Model", userSchema);
+  initUserModel = mongoose.model("user_models", userSchema);
 } catch (error) {
   console.log("Error found in user model creation:", error);
 }

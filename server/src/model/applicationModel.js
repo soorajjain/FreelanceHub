@@ -1,16 +1,15 @@
-import { Schema } from "mongoose";
 import mongoose from "mongoose";
 
 const applicationSchema = new mongoose.Schema(
   {
-    jobPosting: {
+    job_postings: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "JobPostingModel",
+      ref: "job_postings", // Refers to the "job_postings" model for job postings
       required: true,
     },
     freelancer: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "UserModel",
+      ref: "user_models", // Refers to the "user_models" model for freelancers/users
       required: true,
     },
     coverLetter: String,
@@ -23,11 +22,12 @@ const applicationSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-let initApplicationModel = null;
+let Application;
+
 try {
-  initApplicationModel = mongoose.model("Applications", applicationSchema);
+  Application = mongoose.model("applications", applicationSchema);
 } catch (error) {
-  console.log("Error found in user model creation:", error);
+  console.log("Error found in application model creation:", error);
 }
 
-export default initApplicationModel;
+export default Application;

@@ -31,7 +31,7 @@ const jobPostingSchema = new mongoose.Schema(
     },
     client: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "userModel",
+      ref: "user_models",
     },
     banner_image: {
       type: [String],
@@ -40,7 +40,7 @@ const jobPostingSchema = new mongoose.Schema(
     applications: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Application",
+        ref: "applications",
       },
     ],
   },
@@ -49,7 +49,7 @@ const jobPostingSchema = new mongoose.Schema(
 
 let jobPostingsModel = null;
 try {
-  jobPostingsModel = mongoose.model("Job_Postings", jobPostingSchema);
+  jobPostingsModel = mongoose.model("job_postings", jobPostingSchema);
 } catch (error) {
   console.log("Error found in job post creation:", error);
 }
