@@ -5,30 +5,33 @@ const ratingSchema = new mongoose.Schema(
   {
     client: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "userModel",
+      ref: "user_models",
       required: true,
     },
     freelancer: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "userModel",
+      ref: "user_models",
       required: true,
     },
     project: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "projectModel",
+      ref: "projects",
       required: true,
     },
     rating: { type: Number, required: true, min: 1, max: 5 },
-    review: String,
+    review: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
 
-let iniRatingsModel = null;
+let initRatingsModel = null;
 try {
-  initUserModel = mongoose.model("Ratings", ratingSchema);
+  initRatingsModel = mongoose.model("Ratings", ratingSchema);
 } catch (error) {
   console.log("Error found in Rating Model creation:", error);
 }
 
-export default iniRatingsModel;
+export default initRatingsModel;

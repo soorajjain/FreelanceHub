@@ -40,7 +40,7 @@ const projectSchema = new mongoose.Schema(
 
 let initProjectModel = null;
 try {
-  initProjectModel = mongoose.model("Project", projectSchema);
+  initProjectModel = mongoose.model("projects", projectSchema);
 } catch (error) {
   console.log("Error found in project model creation:", error);
 }

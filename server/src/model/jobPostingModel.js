@@ -37,12 +37,6 @@ const jobPostingSchema = new mongoose.Schema(
       type: [String],
       required: "true",
     },
-    applications: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "applications",
-      },
-    ],
   },
   { timestamps: true }
 );
