@@ -2,8 +2,8 @@ import React from "react";
 import Home from "./pages/Main/Home";
 import FindFreelancers from "./pages/clientJobGiver/FindFreelancers";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./pages/loginSignup/Login";
-import SignUp from "./pages/loginSignup/SignUp";
+import Login from "./pages/Auth/Login";
+import SignUp from "./pages/Auth/SignUp";
 
 import Navfree from "./pages/freelancersJobTakers/NavbarFreelancers";
 // import Navclient from "./pages/clientJobGiver/NavbarClient";
@@ -11,6 +11,7 @@ import Navfree from "./pages/freelancersJobTakers/NavbarFreelancers";
 import FindJobs from "./pages/freelancersJobTakers/FindJobs";
 import PostJob from "./pages/clientJobGiver/PostJob";
 import Layout from "./components/Layouts/Layout";
+import UpdateJob from "./pages/clientJobGiver/UpdateJob";
 
 function App() {
   // const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
@@ -53,6 +54,14 @@ function App() {
             element={
               <Layout>
                 <PostJob />
+              </Layout>
+            }
+          />
+          <Route
+            path="/updateJob/:jobId"
+            element={
+              <Layout>
+                <UpdateJob />
               </Layout>
             }
           />

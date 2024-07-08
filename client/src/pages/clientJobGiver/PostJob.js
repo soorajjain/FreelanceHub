@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { ToastContainer } from "react-toastify";
+import CustomToastContainer from "../../components/common/ToastContainer";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 const PostJob = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: " ",
     description: " ",
-    requirements: [], // Now an array of skill IDs
+    requirements: [], //array of skill IDs
     category: " ",
     budget: " ",
     deadline: " ",
@@ -19,28 +21,30 @@ const PostJob = () => {
   const [categories, setCategories] = useState([]); //to get multiple data we use array to store
   const [jobs, setJobs] = useState([]);
   const [user, setUsers] = useState([]);
-  console.log(user);
 
   const fetchJobs = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:3002/api/clients/job_posting"
-      );
+      const response = await axios.get("http://localhost:3002/api/job/");
       const sortedJobs = response.data.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
       setJobs(sortedJobs);
     } catch (error) {
-      console.log("Error while fetching jobs");
+      console.error("Error while fetching jobs:", error);
+      // Handle error state in UI or log more specific details for debugging
     }
   };
-  fetchJobs();
+
+  // Call fetchJobs inside useEffect to ensure it runs after component mount
   useEffect(() => {
-    // Fetch skills from backend
+    fetchJobs();
+  }, []);
+
+  useEffect(() => {
     const fetchSkills = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3002/api/admin/addskill"
+          "http://localhost:3002/api/admin/skill"
         );
         setSkills(response.data); // Assuming backend returns an array of skills
       } catch (error) {
@@ -52,29 +56,19 @@ const PostJob = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3002/api/admin/addcategory"
+          "http://localhost:3002/api/admin/category"
         );
-        console.log(response);
+
         setCategories(response.data); // Assuming backend returns an array of categories
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
     };
 
-    const fetchJobs = async () => {
-      try {
-        await axios
-          .get("http://localhost:3002/api/clients/job_posting")
-          .then((response) => setJobs(response.data));
-      } catch (error) {
-        console.log("Error while fetching jobs");
-      }
-    };
-
     const fetchClient = async () => {
       try {
         await axios
-          .get("http://localhost:3002/api/auth/register")
+          .get("http://localhost:3002/auth/users/")
           .then((response) => setUsers(response.data));
       } catch (error) {
         console.log("Error while fetching user");
@@ -112,7 +106,7 @@ const PostJob = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        "http://localhost:3002/api/clients/job_posting",
+        "http://localhost:3002/api/job/postJob",
         formData,
         {
           headers: {
@@ -121,9 +115,9 @@ const PostJob = () => {
         }
       );
 
-      console.log(response.data);
+      // console.log("Response:", response);
 
-      toast(response.data.msg, {
+      toast.success("Job posted succesffuly", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -133,6 +127,18 @@ const PostJob = () => {
         progress: undefined,
         theme: "light",
       });
+      setTimeout(() => {
+        toast("Scroll down to see the job", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }, 1000);
 
       await fetchJobs();
 
@@ -150,12 +156,34 @@ const PostJob = () => {
       console.error("Error creating job posting:", error);
     }
   };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
-    return `${day}-${month}-${year}`;
+    return `${year}-${month}-${day}`;
+  };
+
+  const handleUpdateJob = (jobId) => {
+    navigate(`/updateJob/${jobId}`);
+  };
+
+  const handleDeleteJob = async (jobId) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://localhost:3002/api/job/delete/${jobId}`, {
+        headers: {
+          authorization: `${token}`,
+        },
+      });
+
+      toast.success("Job deleted successfully");
+
+      await fetchJobs(); // Fetch updated job list after deletion
+    } catch (error) {
+      console.error("Error deleting job:", error);
+    }
   };
 
   return (
@@ -165,16 +193,13 @@ const PostJob = () => {
           JOB POST FORM
         </span>
       </h1>
-      <div className="flex justify-center items-center w-full mt-10 sm:mt-14 sm:mb-28  mb-14 ">
+      <div className="flex justify-center items-center w-full mt-10 sm:mt-14 sm:mb-2 mb-10 ">
         <form
-          className="grid sm:grid-cols-2 grid-cols-1 w-[80%] gap-4 justify-center items-center"
+          className="grid sm:grid-cols-1 grid-cols-1 w-[80%] gap-4 justify-center items-center"
           onSubmit={handleSubmit}
         >
           <div className="mb-5">
-            <label
-              for="email"
-              className="block mb-2 text-sm font-medium text-[#141C3A]"
-            >
+            <label className="block mb-2 text-sm font-medium text-[#141C3A]">
               Title
             </label>
             <input
@@ -188,10 +213,7 @@ const PostJob = () => {
             />
           </div>
           <div className="mb-5">
-            <label
-              for="budget"
-              className="block mb-2 text-sm font-medium text-[#141C3A]"
-            >
+            <label className="block mb-2 text-sm font-medium text-[#141C3A]">
               Budget
             </label>
             <input
@@ -204,10 +226,7 @@ const PostJob = () => {
             />
           </div>
           <div className="mb-5">
-            <label
-              for="description"
-              className="block mb-2 text-sm font-medium text-[#141C3A] "
-            >
+            <label className="block mb-2 text-sm font-medium text-[#141C3A] ">
               description
             </label>
             <textarea
@@ -232,9 +251,10 @@ const PostJob = () => {
               onChange={handleChange}
               className="bg-gray-50 border text-[#141C3A] text-sm rounded-lg focus:text-[#141C3A]focus:text-[#141C3A] block w-full p-2.5"
             >
+              <option value="">Select categories</option>
               {categories &&
                 categories.map((cat) => (
-                  <option id={cat._id} value={cat._id}>
+                  <option key={cat._id} value={cat._id}>
                     {cat.category_name}
                   </option>
                 ))}
@@ -263,11 +283,8 @@ const PostJob = () => {
             </div>
           </div>
 
-          <div class="deadline mb-5">
-            <label
-              for="budget"
-              class="block mb-2 text-sm font-medium text-[#141C3A]"
-            >
+          <div className="deadline mb-5">
+            <label className="block mb-2 text-sm font-medium text-[#141C3A]">
               Deadline
             </label>
             <input
@@ -289,18 +306,7 @@ const PostJob = () => {
             </button>
           </div>
         </form>
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="dark"
-        />
+        <CustomToastContainer />
       </div>
 
       {/* get posted jobs started here */}
@@ -316,48 +322,74 @@ const PostJob = () => {
               return cat.category_name;
             }
           });
-          const client =
-            user &&
-            user.map((client) => {
-              if (client._id === job.client) {
-                return client.user_name;
-              }
-            });
+          // const client =
+          //   user &&
+          //   user.map((client) => {
+          //     if (client._id === job.client) {
+          //       return client.user_name;
+          //     }
+          //   });
 
           return (
-            <div class="m-5">
-              <div class="group mx-2 mt-10 grid max-w-screen-md grid-cols-12 space-x-8 overflow-hidden rounded-lg border py-8 text-gray-700 shadow transition hover:shadow-lg sm:mx-auto">
-                <div class="col-span-11 flex flex-col pr-8 text-left sm:pl-4 mx-5">
-                  <h3 class="text-sm text-gray-600">Category : {category}</h3>
+            <div key={job._id} className="m-5">
+              <div className="group mt-10 grid max-w-screen-xl grid-cols-12 space-x-8 overflow-hidden rounded-lg border py-8 text-gray-700 shadow transition hover:shadow-lg sm:mx-auto">
+                <div className="col-span-11 flex flex-col pr-8 text-left sm:pl-4 mx-10">
+                  {/* Job details */}
+                  <h3 className="text-sm text-gray-600">
+                    Category: {category?.category_name}
+                  </h3>
                   <a
                     href="#"
-                    class="mb-3 overflow-hidden pr-7 text-lg font-semibold sm:text-xl"
+                    className="mb-3 overflow-hidden pr-7 text-lg font-semibold sm:text-xl"
                   >
                     {job.title}
                   </a>
-                  <h3 class="text-sm text-gray-600">Requirements :</h3>
-                  <p class="overflow-hidden pr-7 text-sm">{job.description}</p>
+                  <h3 className="text-sm text-gray-600">Requirements:</h3>
+                  <p className="overflow-hidden pr-7 text-sm">
+                    {job.description}
+                  </p>
 
-                  <div class="mt-5 flex flex-col space-y-3 text-sm font-medium text-gray-500 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-2">
-                    <div class="">
-                      Deadline :
-                      <span class="ml-2 mr-3 rounded-full bg-green-100 px-2 py-0.5 text-green-900">
+                  <div className="mt-5 flex flex-col space-y-3 text-sm font-medium text-gray-500 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-2">
+                    {/* Additional details */}
+                    <div className="">
+                      Deadline:
+                      <span className="ml-2 mr-3 rounded-full bg-green-100 px-2 py-0.5 text-green-900">
                         {formatDate(job.deadline)}
                       </span>
                     </div>
-
-                    <div class="">
+                    <div className="">
                       Budget:
-                      <span class="ml-2 mr-3 rounded-full bg-blue-100 px-2 py-0.5 text-blue-900">
-                        {job.budget}.Rs
+                      <span className="ml-2 mr-3 rounded-full bg-blue-100 px-2 py-0.5 text-blue-900">
+                        {job.budget} Rs
                       </span>
                     </div>
-                    <div class="">
-                      Skills :
-                      <span class="ml-2 mr-3 rounded-full bg-green-100 px-2 py-0.5 text-green-900">
+                    <div className="">
+                      Skills:
+                      <span className="ml-2 mr-3 rounded-full bg-green-100 px-2 py-0.5 text-green-900">
                         {jobSkills.map((skill) => skill.skill_name).join(", ")}
                       </span>
                     </div>
+                  </div>
+
+                  {/* Action buttons */}
+                  <div className="flex mt-3">
+                    <button
+                      type="button"
+                      className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] hover:text-[#141C3A] hover:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3"
+                      onClick={() => handleUpdateJob(job._id)}
+                    >
+                      Update
+                    </button>
+                    <button
+                      type="button"
+                      className="text-white bg-red-500 border focus:ring-4 focus:outline-none hover:border-red-500 hover:text-red-500 hover:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      onClick={() => {
+                        handleDeleteJob(job._id);
+                        console.log("hey");
+                      }}
+                    >
+                      Delete
+                    </button>
                   </div>
                 </div>
               </div>

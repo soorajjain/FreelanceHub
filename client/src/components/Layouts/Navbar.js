@@ -1,24 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../../assets/Freelance-Hub-logo.png";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
 import Box from "@mui/material/Box";
-
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-
 import Hamburger from "hamburger-react";
 import LoginIcon from "@mui/icons-material/Login";
 import InfoIcon from "@mui/icons-material/Info";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
+import { jwtDecode } from "jwt-decode";
 
-const Navbar = ({ isLoggedIn, onLogout }) => {
+const Navbar = () => {
+  const [role, setRole] = useState(null);
   const navigate = useNavigate();
-
   const handleScroll = (event) => {
     event.preventDefault();
     const targetId = event.currentTarget.getAttribute("href").substring(1);
@@ -31,12 +29,8 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
       });
     }
   };
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    onLogout();
-    navigate("/");
-  };
 
+  // menu bar for small screen
   const [anchorEl, setAnchorEl] = useState(null);
   const [isOpen, setOpen] = useState(false);
   const open = Boolean(anchorEl);
@@ -49,6 +43,42 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
   const handleClose = () => {
     setAnchorEl(null);
     setOpen(false);
+  };
+
+  // navbar setup for role based starts here
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        console.log(decodedToken);
+        if (decodedToken.role) {
+          setRole(decodedToken.role);
+          console.log("role : " + decodedToken.role);
+        }
+      } catch (error) {
+        console.error("Invalid token");
+      }
+    }
+  }, []);
+
+  const [showConfirmLogout, setShowConfirmLogout] = useState(false);
+
+  const handleLogout = () => {
+    setShowConfirmLogout(false);
+    localStorage.removeItem("token");
+    // const token = localStorage.getItem("token");
+    // console.log("logout : " + token);
+    setRole(null);
+    navigate("/");
+  };
+
+  const handleLogoutClick = () => {
+    setShowConfirmLogout(true);
+  };
+
+  const handleCancelLogout = () => {
+    setShowConfirmLogout(false);
   };
 
   return (
@@ -74,109 +104,134 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
             About Us
           </a>
         </div>
-        <div className="flex gap-6 items-center mx-4">
-          {isLoggedIn ? (
-            <button
-              className="border-[2px] border-[#023246]  hover:bg-[#023246] hover:text-[#FFFFFF] rounded-3xl md:p-2 md:px-6 p-2 px-3 hidden sm:block"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
+
+        <div className="relative flex gap-6 items-center mx-4">
+          {role ? (
+            <>
+              <button
+                className="border-[2px] border-[#023246] hover:bg-[#023246] hover:text-[#FFFFFF] rounded-3xl md:p-2 md:px-6 p-2 px-3 hidden sm:block"
+                onClick={handleLogoutClick}
+              >
+                Logout
+              </button>
+              {showConfirmLogout && (
+                <div className="absolute top-36 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+                  <div className="bg-white p-6 rounded-lg shadow-lg">
+                    <p>Are you sure you want to logout?</p>
+                    <div className="flex gap-4 mt-4">
+                      <button
+                        className="bg-red-500 text-white px-4 py-2 rounded"
+                        onClick={handleLogout}
+                      >
+                        Yes, Logout
+                      </button>
+                      <button
+                        className="bg-gray-500 text-white px-4 py-2 rounded"
+                        onClick={handleCancelLogout}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </>
           ) : (
             <Link
               to="/register"
-              className="border-[2px] border-[#023246]  hover:bg-[#023246] hover:text-[#FFFFFF] rounded-3xl md:p-2 md:px-6 p-2 px-3 hidden sm:block"
+              className="border-[2px] border-[#023246] hover:bg-[#023246] hover:text-[#FFFFFF] rounded-3xl md:p-2 md:px-6 p-2 px-3 hidden sm:block"
             >
               Sign Up
             </Link>
           )}
-          <div className="sm:hidden">
-            <React.Fragment>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  textAlign: "center",
-                }}
+        </div>
+
+        <div className="sm:hidden">
+          <React.Fragment>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              <IconButton
+                onClick={handleClick}
+                size="small"
+                sx={{ ml: 2 }}
+                aria-controls={open ? "account-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
               >
-                <IconButton
-                  onClick={handleClick}
-                  size="small"
-                  sx={{ ml: 2 }}
-                  aria-controls={open ? "account-menu" : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? "true" : undefined}
-                >
-                  <Hamburger size={25} toggled={isOpen} toggle={setOpen} />
-                </IconButton>
-              </Box>
-              <Menu
-                anchorEl={anchorEl}
-                id="account-menu"
-                open={open}
-                onClose={handleClose}
-                onClick={handleClose}
-                PaperProps={{
-                  elevation: 0,
-                  sx: {
-                    overflow: "visible",
-                    filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                    mt: 1.5,
-                    "& .MuiAvatar-root": {
-                      width: 32,
-                      height: 32,
-                      ml: -0.5,
-                      mr: 1,
-                    },
-                    "&::before": {
-                      content: '""',
-                      display: "block",
-                      position: "absolute",
-                      top: 0,
-                      right: 14,
-                      width: 10,
-                      height: 10,
-                      bgcolor: "background.paper",
-                      transform: "translateY(-50%) rotate(45deg)",
-                      zIndex: 0,
-                    },
+                <Hamburger size={25} toggled={isOpen} toggle={setOpen} />
+              </IconButton>
+            </Box>
+            <Menu
+              anchorEl={anchorEl}
+              id="account-menu"
+              open={open}
+              onClose={handleClose}
+              onClick={handleClose}
+              PaperProps={{
+                elevation: 0,
+                sx: {
+                  overflow: "visible",
+                  filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                  mt: 1.5,
+                  "& .MuiAvatar-root": {
+                    width: 32,
+                    height: 32,
+                    ml: -0.5,
+                    mr: 1,
                   },
-                }}
-                transformOrigin={{ horizontal: "right", vertical: "top" }}
-                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-              >
-                <a href="#how-it-works" onClick={handleScroll}>
-                  <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                      <QuestionMarkIcon fontSize="small" />
-                    </ListItemIcon>
-                    How FH works
-                  </MenuItem>
-                </a>
-                <Divider />
+                  "&::before": {
+                    content: '""',
+                    display: "block",
+                    position: "absolute",
+                    top: 0,
+                    right: 14,
+                    width: 10,
+                    height: 10,
+                    bgcolor: "background.paper",
+                    transform: "translateY(-50%) rotate(45deg)",
+                    zIndex: 0,
+                  },
+                },
+              }}
+              transformOrigin={{ horizontal: "right", vertical: "top" }}
+              anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+            >
+              <a href="#how-it-works" onClick={handleScroll}>
+                <MenuItem onClick={handleClose}>
+                  <ListItemIcon>
+                    <QuestionMarkIcon fontSize="small" />
+                  </ListItemIcon>
+                  How FH works
+                </MenuItem>
+              </a>
+              <Divider />
 
-                <a href="#about" onClick={handleScroll}>
-                  <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                      <InfoIcon fontSize="small" />
-                    </ListItemIcon>
-                    About
-                  </MenuItem>
-                </a>
+              <a href="#about" onClick={handleScroll}>
+                <MenuItem onClick={handleClose}>
+                  <ListItemIcon>
+                    <InfoIcon fontSize="small" />
+                  </ListItemIcon>
+                  About
+                </MenuItem>
+              </a>
 
-                <Divider />
+              <Divider />
 
-                <Link to="/register">
-                  <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                      <LoginIcon fontSize="small" />
-                    </ListItemIcon>
-                    Sign Up
-                  </MenuItem>
-                </Link>
-              </Menu>
-            </React.Fragment>
-          </div>
+              <Link to="/register">
+                <MenuItem onClick={handleClose}>
+                  <ListItemIcon>
+                    <LoginIcon fontSize="small" />
+                  </ListItemIcon>
+                  Sign Up
+                </MenuItem>
+              </Link>
+            </Menu>
+          </React.Fragment>
         </div>
       </nav>
     </div>
