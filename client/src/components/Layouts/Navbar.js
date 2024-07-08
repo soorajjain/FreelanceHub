@@ -87,23 +87,23 @@ const Navbar = () => {
         <div className="flex gap-10 items-center">
           {role === "client" ? (
             <>
-              <Link to="/freelancers" className="px-1">
+              <Link to="/client/freelancers" className="px-1">
                 <img src={logo} className="sm:w-[200px] w-[150px]" alt="logo" />
               </Link>
               <Link
-                to="/freelancers"
+                to="/client/freelancers"
                 className="hidden text-black hover:text-[#023246] md:block"
               >
                 Freelancers
               </Link>
               <Link
-                to="/postJob"
+                to="/client/postJob"
                 className="hidden text-black hover:text-[#023246] md:block"
               >
                 Post Job
               </Link>
               <Link
-                to="/projects"
+                to="/client/projects"
                 className="hidden text-black hover:text-[#023246] md:block"
               >
                 Projects
@@ -115,13 +115,13 @@ const Navbar = () => {
                 <img src={logo} className="sm:w-[200px] w-[150px]" alt="logo" />
               </Link>
               <Link
-                to="/findJobs"
+                to="/freelancer/findJobs"
                 className="hidden text-black hover:text-[#023246] md:block"
               >
                 Find Jobs
               </Link>
               <Link
-                to="/freelancerProject"
+                to="/freelancer/freelancerProject"
                 className="hidden text-black hover:text-[#023246] md:block"
               >
                 Project

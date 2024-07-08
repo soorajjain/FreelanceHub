@@ -61,9 +61,9 @@ const Login = () => {
         }, 1000);
         setTimeout(() => {
           if (role === "freelancer") {
-            navigate("/findJobs");
+            navigate("/freelancer/findJobs");
           } else if (role === "client") {
-            navigate("/postJob");
+            navigate("/client/postJob");
           }
         }, 2000);
       }

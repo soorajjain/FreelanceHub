@@ -23,6 +23,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
+          {/* Home page route */}
           <Route
             path="/"
             element={
@@ -31,18 +32,14 @@ function App() {
               </Layout>
             }
           />
-
+          {/* Auth routes starts */}
           <Route path="/register" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
+          {/* Auth routes ends */}
 
-          {/* trials */}
-
-          <Route path="/navfree" element={<Navfree />} />
-          {/* <Route path="/navclient" element={<Navclient />} /> */}
-
-          {/* trials */}
+          {/* Client side routes */}
           <Route
-            path="/find_freelancers"
+            path="/client/freelancers"
             element={
               <Layout>
                 <FindFreelancers />
@@ -50,7 +47,7 @@ function App() {
             }
           />
           <Route
-            path="/postJob"
+            path="/client/postJob"
             element={
               <Layout>
                 <PostJob />
@@ -58,21 +55,25 @@ function App() {
             }
           />
           <Route
-            path="/updateJob/:jobId"
+            path="/client/updateJob/:jobId"
             element={
               <Layout>
                 <UpdateJob />
               </Layout>
             }
           />
+          {/* client side routing ends */}
+
+          {/* Freelancer side routing */}
           <Route
-            path="/findJobs"
+            path="/freelancer/findJobs"
             element={
               <Layout>
                 <FindJobs />
               </Layout>
             }
           />
+          {/* Freelancer side routing ends */}
         </Routes>
       </BrowserRouter>
     </>

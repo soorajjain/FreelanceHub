@@ -166,7 +166,7 @@ const PostJob = () => {
   };
 
   const handleUpdateJob = (jobId) => {
-    navigate(`/updateJob/${jobId}`);
+    navigate(`/client/updateJob/${jobId}`);
   };
 
   const handleDeleteJob = async (jobId) => {
