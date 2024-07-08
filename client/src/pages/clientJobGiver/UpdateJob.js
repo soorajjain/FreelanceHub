@@ -132,7 +132,7 @@ const PostJob = () => {
   };
 
   const navigateToPostJob = () => {
-    navigate("/post_job");
+    navigate("/postJob");
   };
   return (
     <>

@@ -50,7 +50,7 @@ function App() {
             }
           />
           <Route
-            path="/post_job"
+            path="/postJob"
             element={
               <Layout>
                 <PostJob />
@@ -66,7 +66,7 @@ function App() {
             }
           />
           <Route
-            path="/find_jobs"
+            path="/findJobs"
             element={
               <Layout>
                 <FindJobs />

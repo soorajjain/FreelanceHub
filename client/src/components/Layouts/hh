@@ -103,7 +103,7 @@ const Navbar = () => {
                 Post Job
               </Link>
               <Link
-                to="/projects"
+                to="/clientProject"
                 className="hidden text-black hover:text-[#023246] md:block"
               >
                 Projects
@@ -246,130 +246,35 @@ const Navbar = () => {
               transformOrigin={{ horizontal: "right", vertical: "top" }}
               anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
             >
-              {role == "client" ? (
-                <>
-                  <Link to="/freelancers">
-                    <MenuItem onClick={handleClose}>
-                      <ListItemIcon>
-                        <InfoIcon fontSize="small" />
-                      </ListItemIcon>
-                      Freelancers
-                    </MenuItem>
-                  </Link>
+              <a href="#how-it-works" onClick={handleScroll}>
+                <MenuItem onClick={handleClose}>
+                  <ListItemIcon>
+                    <QuestionMarkIcon fontSize="small" />
+                  </ListItemIcon>
+                  How FH works
+                </MenuItem>
+              </a>
+              <Divider />
 
-                  <Divider />
-
-                  <Link to="/postJob">
-                    <MenuItem onClick={handleClose}>
-                      <ListItemIcon>
-                        <InfoIcon fontSize="small" />
-                      </ListItemIcon>
-                      Post Job
-                    </MenuItem>
-                  </Link>
-                  <Divider />
-
-                  <Link to="/clientProject">
-                    <MenuItem onClick={handleClose}>
-                      <ListItemIcon>
-                        <InfoIcon fontSize="small" />
-                      </ListItemIcon>
-                      Project
-                    </MenuItem>
-                  </Link>
-                  <Divider />
-                </>
-              ) : role == "freelancer" ? (
-                <>
-                  <Link to="/findJobs">
-                    <MenuItem onClick={handleClose}>
-                      <ListItemIcon>
-                        <InfoIcon fontSize="small" />
-                      </ListItemIcon>
-                      Find Jobs
-                    </MenuItem>
-                  </Link>
-
-                  <Divider />
-
-                  <Link to="/freelancerProject">
-                    <MenuItem onClick={handleClose}>
-                      <ListItemIcon>
-                        <InfoIcon fontSize="small" />
-                      </ListItemIcon>
-                      Project
-                    </MenuItem>
-                  </Link>
-                  <Divider />
-                </>
-              ) : (
-                <>
-                  <a href="#how-it-works" onClick={handleScroll}>
-                    <MenuItem onClick={handleClose}>
-                      <ListItemIcon>
-                        <QuestionMarkIcon fontSize="small" />
-                      </ListItemIcon>
-                      How FH works
-                    </MenuItem>
-                  </a>
-                  <Divider />
-
-                  <a href="#about" onClick={handleScroll}>
-                    <MenuItem onClick={handleClose}>
-                      <ListItemIcon>
-                        <InfoIcon fontSize="small" />
-                      </ListItemIcon>
-                      About
-                    </MenuItem>
-                  </a>
-                </>
-              )}
+              <a href="#about" onClick={handleScroll}>
+                <MenuItem onClick={handleClose}>
+                  <ListItemIcon>
+                    <InfoIcon fontSize="small" />
+                  </ListItemIcon>
+                  About
+                </MenuItem>
+              </a>
 
               <Divider />
-              <div>
-                {role ? (
-                  <>
-                    <button onClick={handleLogoutClick}>
-                      <MenuItem onClick={handleClose}>
-                        <ListItemIcon>
-                          <LoginIcon fontSize="small" />
-                        </ListItemIcon>
-                        Log out
-                      </MenuItem>
-                    </button>
-                    {showConfirmLogout && (
-                      <div className="absolute top-44 right-6 w-full h-full flex items-center justify-center text-[#023246] bg-opacity-50">
-                        <div className="bg-white p-6 rounded-lg shadow-lg">
-                          <p>Are you sure you want to logout?</p>
-                          <div className="flex gap-4 mt-4">
-                            <button
-                              className="bg-[#023246] text-white px-4 py-2 rounded"
-                              onClick={handleLogout}
-                            >
-                              Yes, Logout
-                            </button>
-                            <button
-                              className="bg-[#023246] text-white px-4 py-2 rounded"
-                              onClick={handleCancelLogout}
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <Link to="/register">
-                    <MenuItem onClick={handleClose}>
-                      <ListItemIcon>
-                        <LoginIcon fontSize="small" />
-                      </ListItemIcon>
-                      Sign Up
-                    </MenuItem>
-                  </Link>
-                )}
-              </div>
+
+              <Link to="/register">
+                <MenuItem onClick={handleClose}>
+                  <ListItemIcon>
+                    <LoginIcon fontSize="small" />
+                  </ListItemIcon>
+                  Sign Up
+                </MenuItem>
+              </Link>
             </Menu>
           </React.Fragment>
         </div>

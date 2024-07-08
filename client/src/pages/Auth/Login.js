@@ -44,7 +44,7 @@ const Login = () => {
         const decodedToken = jwtDecode(token);
         const { role } = decodedToken;
         setTimeout(() => {
-          toast.success(
+          toast(
             `Redirecting to ${
               role === "freelancer" ? "freelancer" : "client"
             } dashboard`,
@@ -61,11 +61,11 @@ const Login = () => {
         }, 1000);
         setTimeout(() => {
           if (role === "freelancer") {
-            navigate("/find_jobs");
+            navigate("/findJobs");
           } else if (role === "client") {
-            navigate("/post_job");
+            navigate("/postJob");
           }
-        }, 3000);
+        }, 2000);
       }
     } catch (error) {
       if (error.response && error.response.data) {
