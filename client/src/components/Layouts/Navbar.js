@@ -85,24 +85,55 @@ const Navbar = () => {
     <div id="home" className="w-full bg-[#F6F6F6]">
       <nav className="Navbar max-w-[1170px] text-[#141C3A] lg:mx-auto flex justify-between py-4 sm:py-8 bg-[#F6F6F6] mx-3 ">
         <div className="flex gap-10 items-center">
-          <Link to="/" className="px-1">
-            <img src={logo} className="sm:w-[200px] w-[150px]" alt="logo" />
-          </Link>
-          <a
-            href="#about"
-            onClick={handleScroll}
-            className="hidden text-black hover:text-[#023246] md:block"
-          >
-            How Freelance Hub works
-          </a>
-
-          <a
-            href="#about"
-            onClick={handleScroll}
-            className="hidden text-black hover:text-[#023246] md:block"
-          >
-            About Us
-          </a>
+          {role === "client" ? (
+            <>
+              <Link to="/post_job" className="px-1">
+                <img src={logo} className="sm:w-[200px] w-[150px]" alt="logo" />
+              </Link>
+              <a className="hidden text-black hover:text-[#023246] md:block">
+                Post Job
+              </a>
+              <a className="hidden text-black hover:text-[#023246] md:block">
+                Projects
+              </a>
+            </>
+          ) : role === "freelancer" ? (
+            <>
+              <Link to="/find_job" className="px-1">
+                <img src={logo} className="sm:w-[200px] w-[150px]" alt="logo" />
+              </Link>
+              <a className="hidden text-black hover:text-[#023246] md:block">
+                Find Job
+              </a>
+              <a
+                href="#about"
+                onClick={handleScroll}
+                className="hidden text-black hover:text-[#023246] md:block"
+              >
+                Project
+              </a>
+            </>
+          ) : (
+            <>
+              <Link to="/" className="px-1">
+                <img src={logo} className="sm:w-[200px] w-[150px]" alt="logo" />
+              </Link>
+              <a
+                href="#about"
+                onClick={handleScroll}
+                className="hidden text-black hover:text-[#023246] md:block"
+              >
+                How Freelance Hub works
+              </a>
+              <a
+                href="#about"
+                onClick={handleScroll}
+                className="hidden text-black hover:text-[#023246] md:block"
+              >
+                About Us
+              </a>
+            </>
+          )}
         </div>
 
         <div className="relative flex gap-6 items-center mx-4">
@@ -115,18 +146,18 @@ const Navbar = () => {
                 Logout
               </button>
               {showConfirmLogout && (
-                <div className="absolute top-36 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
-                  <div className="bg-white p-6 rounded-lg shadow-lg">
+                <div className="absolute top-36 right-2 w-full h-full flex items-center justify-center text-[#023246] bg-opacity-50">
+                  <div className=" bg-white p-6 rounded-lg shadow-lg">
                     <p>Are you sure you want to logout?</p>
                     <div className="flex gap-4 mt-4">
                       <button
-                        className="bg-red-500 text-white px-4 py-2 rounded"
+                        className="bg-[#023246] text-white  px-4 py-2 rounded"
                         onClick={handleLogout}
                       >
                         Yes, Logout
                       </button>
                       <button
-                        className="bg-gray-500 text-white px-4 py-2 rounded"
+                        className="bg-[#023246] text-white px-4 py-2 rounded"
                         onClick={handleCancelLogout}
                       >
                         Cancel
