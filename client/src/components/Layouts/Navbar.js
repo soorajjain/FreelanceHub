@@ -133,7 +133,7 @@ const Navbar = () => {
                 <img src={logo} className="sm:w-[200px] w-[150px]" alt="logo" />
               </Link>
               <a
-                href="#about"
+                href="#how-it-works"
                 onClick={handleScroll}
                 className="hidden text-black hover:text-[#023246] md:block"
               >
