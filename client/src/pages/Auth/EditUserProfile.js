@@ -4,10 +4,12 @@ import { toast } from "react-toastify";
 import CustomToastContainer from "../../components/common/ToastContainer";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, useParams } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const EditUserProfile = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [role, setRole] = useState(null);
   const [formData, setFormData] = useState({
     user_name: " ",
     role: " ",
@@ -107,7 +109,7 @@ const EditUserProfile = () => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "light",
+        theme: "dark",
       });
     } catch (error) {
       console.error("Error Updating user:", error);
@@ -125,6 +127,22 @@ const EditUserProfile = () => {
   const navigateToPostJob = () => {
     navigate(`/user/profile/${id}`);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        console.log(decodedToken);
+        if (decodedToken.role) {
+          setRole(decodedToken.role);
+          console.log("role : " + decodedToken.role);
+        }
+      } catch (error) {
+        console.error("Invalid token");
+      }
+    }
+  }, []);
   return (
     <>
       <h1 className="flex justify-center items-center mt-4 sm:mt-10">
@@ -166,23 +184,29 @@ const EditUserProfile = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="mb-5">
-              <label className="block mb-2 text-sm font-medium text-[#141C3A]">
-                Company Name
-              </label>
-              <input
-                name="company_name"
-                type="text"
-                value={formData.company_name}
-                className="shadow-sm bg-gray-50 border border-gray-300 text-[#141C3A] text-sm rounded-lg focus:text-[#141C3A]  block p-2.5 w-full"
-                placeholder="Project Title"
-                required
-                onChange={handleChange}
-              />
-            </div>
+
+            {role === "client" ? (
+              <div className="mb-5">
+                <label className="block mb-2 text-sm font-medium text-[#141C3A]">
+                  Company Name *
+                </label>
+                <input
+                  name="company_name"
+                  type="text"
+                  value={formData.company_name}
+                  className="shadow-sm bg-gray-50 border border-gray-300 text-[#141C3A] text-sm rounded-lg focus:text-[#141C3A]  block p-2.5 w-full"
+                  placeholder="Project Title"
+                  required
+                  onChange={handleChange}
+                />
+              </div>
+            ) : (
+              <></>
+            )}
+
             <div className="mb-5">
               <label className="block mb-2 text-sm font-medium text-[#141C3A] ">
-                About
+                About *
               </label>
               <textarea
                 id="description"
@@ -242,7 +266,7 @@ const EditUserProfile = () => {
             </div>
             <div className="mb-5">
               <label className="block mb-2 text-sm font-medium text-[#141C3A]">
-                Experience
+                Experience *
               </label>
               <input
                 type="text"
