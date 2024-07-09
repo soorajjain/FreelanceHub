@@ -158,7 +158,7 @@ const Navbar = () => {
           {role ? (
             <>
               <span className="hidden lg:block">
-                Hello <span>{name}</span> 👋
+                Hello <span>{name}</span> 👋👋
               </span>
               <Link className="ml-[-35px] md:p-2 md:px-6 p-2 px-3 hidden lg:block">
                 <img
