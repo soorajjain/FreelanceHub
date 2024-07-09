@@ -18,6 +18,7 @@ import profile from "../../assets/profile.png";
 const Navbar = () => {
   const [role, setRole] = useState(null);
   const [name, setName] = useState(null);
+  const [id, setId] = useState(null);
 
   const navigate = useNavigate();
   const handleScroll = (event) => {
@@ -58,6 +59,7 @@ const Navbar = () => {
         if (decodedToken.role) {
           setRole(decodedToken.role);
           setName(decodedToken.name);
+          setId(decodedToken.id);
           console.log("role : " + decodedToken.role);
         }
       } catch (error) {
@@ -83,6 +85,10 @@ const Navbar = () => {
 
   const handleCancelLogout = () => {
     setShowConfirmLogout(false);
+  };
+
+  const handleOpenProfileById = (id) => {
+    navigate(`/user/profile/${id}`);
   };
 
   return (
@@ -158,15 +164,18 @@ const Navbar = () => {
           {role ? (
             <>
               <span className="hidden lg:block">
-                Hello <span>{name}</span> 👋👋
+                Hello <span>{name}</span> 👋
               </span>
-              <Link className="ml-[-35px] md:p-2 md:px-6 p-2 px-3 hidden lg:block">
+              <div
+                onClick={() => handleOpenProfileById(id)}
+                className="ml-[-35px] md:p-2 md:px-6 p-2 px-3 hidden lg:block"
+              >
                 <img
                   className="h-14 w-14 border rounded-full"
                   src={profile}
                   alt="Profile"
                 />
-              </Link>
+              </div>
               <button
                 className="border-[2px] border-[#023246] hover:bg-[#023246] hover:text-[#FFFFFF] rounded-3xl md:p-2 md:px-6 p-2 px-3 hidden sm:block"
                 onClick={handleLogoutClick}
@@ -353,7 +362,7 @@ const Navbar = () => {
                       </MenuItem>
                     </button>
                     {showConfirmLogout && (
-                      <div className="absolute top-44 right-6 w-full h-full flex items-center justify-center text-[#023246] bg-opacity-50">
+                      <div className="absolute z-1 top-44 right-6 w-full h-full flex items-center justify-center text-[#023246] bg-opacity-50">
                         <div className="bg-white p-6 rounded-lg shadow-lg">
                           <p>Are you sure you want to logout?</p>
                           <div className="flex gap-4 mt-4">
@@ -389,6 +398,7 @@ const Navbar = () => {
           </React.Fragment>
         </div>
       </nav>
+      <div className="border-t-[1px] border-t-[#605d5d] bg-[#F6F6F6]"></div>
     </div>
   );
 };
