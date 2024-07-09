@@ -12,6 +12,7 @@ import FindJobs from "./pages/freelancersJobTakers/FindJobs";
 import PostJob from "./pages/clientJobGiver/PostJob";
 import Layout from "./components/Layouts/Layout";
 import UpdateJob from "./pages/clientJobGiver/UpdateJob";
+import ClientProfile from "./pages/clientJobGiver/ClientProfile";
 
 function App() {
   // const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
@@ -55,16 +56,25 @@ function App() {
             }
           />
           <Route
-            path="/client/updateJob/:jobId"
+            path="/client/profile"
             element={
               <Layout>
-                <UpdateJob />
+                <ClientProfile />
               </Layout>
             }
           />
           {/* client side routing ends */}
 
           {/* Freelancer side routing */}
+          <Route
+            path="/freelancer/findJobs"
+            element={
+              <Layout>
+                <FindJobs />
+              </Layout>
+            }
+          />
+
           <Route
             path="/freelancer/findJobs"
             element={

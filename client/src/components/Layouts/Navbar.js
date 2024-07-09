@@ -13,9 +13,12 @@ import LoginIcon from "@mui/icons-material/Login";
 import InfoIcon from "@mui/icons-material/Info";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 import { jwtDecode } from "jwt-decode";
+import profile from "../../assets/profile.png";
 
 const Navbar = () => {
   const [role, setRole] = useState(null);
+  const [name, setName] = useState(null);
+
   const navigate = useNavigate();
   const handleScroll = (event) => {
     event.preventDefault();
@@ -54,6 +57,7 @@ const Navbar = () => {
         console.log(decodedToken);
         if (decodedToken.role) {
           setRole(decodedToken.role);
+          setName(decodedToken.name);
           console.log("role : " + decodedToken.role);
         }
       } catch (error) {
@@ -153,12 +157,23 @@ const Navbar = () => {
         <div className="relative flex gap-6 items-center mx-4">
           {role ? (
             <>
+              <span className="hidden lg:block">
+                Hello <span>{name}</span> 👋
+              </span>
+              <Link className="ml-[-35px] md:p-2 md:px-6 p-2 px-3 hidden lg:block">
+                <img
+                  className="h-14 w-14 border rounded-full"
+                  src={profile}
+                  alt="Profile"
+                />
+              </Link>
               <button
                 className="border-[2px] border-[#023246] hover:bg-[#023246] hover:text-[#FFFFFF] rounded-3xl md:p-2 md:px-6 p-2 px-3 hidden sm:block"
                 onClick={handleLogoutClick}
               >
                 Logout
               </button>
+
               {showConfirmLogout && (
                 <div className="absolute top-36 right-2 w-full h-full flex items-center justify-center text-[#023246] bg-opacity-50">
                   <div className=" bg-white p-6 rounded-lg shadow-lg">
@@ -246,7 +261,7 @@ const Navbar = () => {
               transformOrigin={{ horizontal: "right", vertical: "top" }}
               anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
             >
-              {role == "client" ? (
+              {role === "client" ? (
                 <>
                   <Link to="/freelancers">
                     <MenuItem onClick={handleClose}>
@@ -279,7 +294,7 @@ const Navbar = () => {
                   </Link>
                   <Divider />
                 </>
-              ) : role == "freelancer" ? (
+              ) : role === "freelancer" ? (
                 <>
                   <Link to="/findJobs">
                     <MenuItem onClick={handleClose}>
