@@ -1,6 +1,5 @@
 import React from "react";
 import Home from "./pages/Main/Home";
-import FindFreelancers from "./pages/clientJobGiver/FindFreelancers";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Auth/Login";
 import SignUp from "./pages/Auth/SignUp";
@@ -15,6 +14,7 @@ import UpdateJob from "./pages/clientJobGiver/UpdateJob";
 import UserProfile from "./pages/Auth/UserProfile";
 import EditUserProfile from "./pages/Auth/EditUserProfile";
 import NoPage from "./components/NoPage/NoPage";
+import FindFreelancers from "./pages/clientJobGiver/FindFreelancers";
 
 function App() {
   // const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));

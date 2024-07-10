@@ -14,10 +14,12 @@ import InfoIcon from "@mui/icons-material/Info";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 import { jwtDecode } from "jwt-decode";
 import profile from "../../assets/profile.png";
+import axios from "axios";
 
 const Navbar = () => {
   const [role, setRole] = useState(null);
   const [name, setName] = useState(null);
+  const [user, setUser] = useState([]);
   const [id, setId] = useState(null);
 
   const navigate = useNavigate();
@@ -49,6 +51,23 @@ const Navbar = () => {
     setOpen(false);
   };
 
+  const fetchUser = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `http://localhost:3002/auth/users/${id}`,
+        {
+          headers: {
+            authorization: `${token}`,
+          },
+        }
+      );
+      setUser(response.data);
+    } catch (error) {
+      console.log("clientprofile" + error);
+    }
+  };
+
   // navbar setup for role based starts here
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -66,7 +85,11 @@ const Navbar = () => {
         console.error("Invalid token");
       }
     }
-  }, []);
+  });
+
+  useEffect(() => {
+    fetchUser();
+  }, [id]);
 
   const [showConfirmLogout, setShowConfirmLogout] = useState(false);
 
@@ -171,8 +194,14 @@ const Navbar = () => {
                 className="ml-[-35px] md:p-2 md:px-6 p-2 px-3 hidden lg:block"
               >
                 <img
-                  className="h-12 w-12 border rounded-full"
-                  src={profile}
+                  className="h-12 w-12 object-cover border rounded-full"
+                  src={
+                    user &&
+                    Array.isArray(user.profile_image) &&
+                    user.profile_image.length > 0
+                      ? `http://localhost:3002/${user.profile_image}`
+                      : profile
+                  }
                   alt="Profile"
                 />
               </div>
@@ -185,8 +214,8 @@ const Navbar = () => {
               </button>
 
               {showConfirmLogout && (
-                <div className="absolute top-36 right-2 w-full h-full flex items-center justify-center text-[#023246] bg-opacity-50">
-                  <div className=" bg-white p-6 rounded-lg shadow-lg">
+                <div className="absolute top-36 right-2 w-full h-full flex items-center justify-center text-[#023246] bg-opacity-50 z-60">
+                  <div className=" bg-white p-6 rounded-lg shadow-lg z-50">
                     <p>Are you sure you want to logout?</p>
                     <div className="flex gap-4 mt-4">
                       <button

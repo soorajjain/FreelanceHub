@@ -11,21 +11,20 @@ const EditUserProfile = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState(null);
   const [formData, setFormData] = useState({
-    user_name: " ",
-    role: " ",
-    email: " ",
-    skills: [], //array of skill IDs
-    password: " ",
-    about: " ",
-    experience: " ",
-    company_name: " ",
-    // resume: [""],
-    // profile_image: [""],
+    user_name: "",
+    role: "",
+    email: "",
+    skills: [], // array of skill IDs
+    password: "",
+    about: "",
+    experience: "",
+    company_name: "",
+    resume: "",
+    profile_image: "",
   });
 
   const [skills, setSkills] = useState([]);
-  const [categories, setCategories] = useState([]); //to get multiple data we use array to store
-  // const [jobs, setJobs] = useState([]);
+  const [categories, setCategories] = useState([]); // to get multiple data we use array to store
 
   const fetchUser = async () => {
     try {
@@ -38,14 +37,12 @@ const EditUserProfile = () => {
           },
         }
       );
-      // console.log(response.data);
       setFormData(response.data);
     } catch (error) {
       console.log("clientprofile" + error);
     }
   };
 
-  // Call fetchJobs inside useEffect to ensure it runs after component mount
   useEffect(() => {
     fetchUser();
   }, []);
@@ -70,6 +67,11 @@ const EditUserProfile = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    setFormData({ ...formData, [name]: files[0] });
+  };
+
   const handleCheckboxChange = (e) => {
     const { value } = e.target;
     const updatedRequirements = [...formData.skills];
@@ -88,20 +90,32 @@ const EditUserProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("token");
+
+    const data = new FormData();
+    for (const key in formData) {
+      if (formData[key] instanceof File) {
+        data.append(key, formData[key]);
+      } else if (Array.isArray(formData[key])) {
+        formData[key].forEach((item) => data.append(`${key}[]`, item));
+      } else {
+        data.append(key, formData[key]);
+      }
+    }
+
     try {
-      const token = localStorage.getItem("token");
-      console.log(formData);
       const response = await axios.put(
         `http://localhost:3002/auth/users/edit/${id}`,
-        formData,
+        data,
         {
           headers: {
             authorization: `${token}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
 
-      toast.success("User profile updated succesffuly", {
+      toast.success("User profile updated successfully", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -112,17 +126,9 @@ const EditUserProfile = () => {
         theme: "dark",
       });
     } catch (error) {
-      console.error("Error Updating user:", error);
+      console.error("Error updating user:", error);
     }
   };
-
-  //   const formatDate = (dateString) => {
-  //     const date = new Date(dateString);
-  //     const year = date.getFullYear();
-  //     const month = String(date.getMonth() + 1).padStart(2, "0");
-  //     const day = String(date.getDate()).padStart(2, "0");
-  //     return `${year}-${month}-${day}`;
-  //   };
 
   const navigateToPostJob = () => {
     navigate(`/user/profile/${id}`);
@@ -133,16 +139,15 @@ const EditUserProfile = () => {
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
-        console.log(decodedToken);
         if (decodedToken.role) {
           setRole(decodedToken.role);
-          console.log("role : " + decodedToken.role);
         }
       } catch (error) {
         console.error("Invalid token");
       }
     }
   }, []);
+
   return (
     <>
       <h1 className="flex justify-center items-center mt-4 sm:mt-10">
@@ -150,10 +155,11 @@ const EditUserProfile = () => {
           USER PROFILE UPDATE
         </span>
       </h1>
-      <div className="flex justify-center items-center w-full mt-10 sm:mt-14 sm:mb-28  mb-14">
+      <div className="flex justify-center items-center w-full mt-10 sm:mt-14 sm:mb-28 mb-14">
         <form
           onSubmit={handleSubmit}
           className="grid sm:grid-cols-1 grid-cols-1 w-[80%] gap-4"
+          encType="multipart/form-data"
         >
           <div>
             <div className="mb-5">
@@ -164,8 +170,8 @@ const EditUserProfile = () => {
                 name="user_name"
                 type="text"
                 value={formData.user_name}
-                className="shadow-sm bg-gray-50 border border-gray-300 text-[#141C3A] text-sm rounded-lg focus:text-[#141C3A]  block p-2.5 w-full"
-                placeholder="Project Title"
+                className="shadow-sm bg-gray-50 border border-gray-300 text-[#141C3A] text-sm rounded-lg focus:text-[#141C3A] block p-2.5 w-full"
+                placeholder="Name"
                 required
                 onChange={handleChange}
               />
@@ -179,7 +185,7 @@ const EditUserProfile = () => {
                 name="email"
                 type="email"
                 value={formData.email}
-                className="shadow-sm bg-gray-50 border  text-sm rounded-lg text-[#141C3A] block w-full p-2.5 "
+                className="shadow-sm bg-gray-50 border text-sm rounded-lg text-[#141C3A] block w-full p-2.5"
                 required
                 onChange={handleChange}
               />
@@ -194,58 +200,49 @@ const EditUserProfile = () => {
                   name="company_name"
                   type="text"
                   value={formData.company_name}
-                  className="shadow-sm bg-gray-50 border border-gray-300 text-[#141C3A] text-sm rounded-lg focus:text-[#141C3A]  block p-2.5 w-full"
-                  placeholder="Project Title"
+                  className="shadow-sm bg-gray-50 border border-gray-300 text-[#141C3A] text-sm rounded-lg focus:text-[#141C3A] block p-2.5 w-full"
+                  placeholder="Company Name"
                   required
                   onChange={handleChange}
                 />
               </div>
-            ) : (
-              <></>
+            ):(
+              <div className="mb-5">
+                <label className="block mb-2 text-sm font-medium text-[#141C3A]">
+                  Designation *
+                </label>
+                <input
+                  name="company_name"
+                  type="text"
+                  value={formData.company_name}
+                  className="shadow-sm bg-gray-50 border border-gray-300 text-[#141C3A] text-sm rounded-lg focus:text-[#141C3A] block p-2.5 w-full"
+                  placeholder="Company Name"
+                  required
+                  onChange={handleChange}
+                />
+              </div>
             )}
 
             <div className="mb-5">
-              <label className="block mb-2 text-sm font-medium text-[#141C3A] ">
+              <label className="block mb-2 text-sm font-medium text-[#141C3A]">
                 About *
               </label>
               <textarea
-                id="description"
+                id="about"
                 name="about"
                 value={formData.about}
                 rows="4"
-                className="block p-2.5 w-full text-sm text-[#141C3A] bg-gray-50 rounded-lg border text-[#141C3A]focus:text-[#141C3A] focus:text-[#141C3A]"
-                placeholder="Project Description..."
+                className="block p-2.5 w-full text-sm text-[#141C3A] bg-gray-50 rounded-lg border focus:text-[#141C3A]"
+                placeholder="About"
                 onChange={handleChange}
               ></textarea>
             </div>
-
-            {/* <div className="mb-5">
-              <label className="block mb-2 text-sm font-medium text-[#141C3A]">
-                category
-              </label>
-              <select
-                id="countries"
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
-                className="bg-gray-50 border text-[#141C3A] text-sm rounded-lg focus:text-[#141C3A]focus:text-[#141C3A] block w-full p-2.5"
-              >
-                <option value="">Select categories</option>
-                {categories &&
-                  categories.map((cat) => (
-                    <option key={cat._id} value={cat._id}>
-                      {cat.category_name}
-                    </option>
-                  ))}
-              </select>
-            </div> */}
 
             <div className="mb-5">
               <label className="block mb-2 text-sm font-medium text-[#141C3A]">
                 Skills
               </label>
-
-              <div className="grid gap-2 items-center sm:grid-cols-4 grid-cols-2   w-full">
+              <div className="grid gap-2 items-center sm:grid-cols-4 grid-cols-2 w-full">
                 {skills &&
                   skills.map((skill) => (
                     <label key={skill._id} className="flex items-center">
@@ -264,6 +261,7 @@ const EditUserProfile = () => {
                   ))}
               </div>
             </div>
+
             <div className="mb-5">
               <label className="block mb-2 text-sm font-medium text-[#141C3A]">
                 Experience *
@@ -272,49 +270,57 @@ const EditUserProfile = () => {
                 type="text"
                 name="experience"
                 value={formData.experience}
-                className="shadow-sm bg-gray-50 border  text-sm rounded-lg text-[#141C3A] block w-full p-2.5 "
+                className="shadow-sm bg-gray-50 border text-sm rounded-lg text-[#141C3A] block w-full p-2.5"
                 required
                 onChange={handleChange}
               />
             </div>
+            {role === "freelancer" && (
+              <div className="mb-5">
+                <label className="block mb-2 text-sm font-medium text-[#141C3A]">
+                  Resume
+                </label>
+                <input
+                  type="file"
+                  name="resume"
+                  className="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none"
+                  onChange={handleFileChange}
+                />
+              </div>
+            )}
 
-            {/* <div className="deadline mb-5">
+            <div className="mb-5">
               <label className="block mb-2 text-sm font-medium text-[#141C3A]">
-                Deadline
+                Profile Image
               </label>
               <input
-                className="shadow-sm bg-gray-50 border border-gray-300 text-[#141C3A] text-sm rounded-lg focus:text-[#141C3A] block w-full p-2.5 "
-                type="date"
-                name="deadline"
-                value={formData.deadline}
-                onChange={handleChange}
-                required
+                type="file"
+                name="profile_image"
+                className="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none"
+                onChange={handleFileChange}
               />
-            </div> */}
+            </div>
           </div>
-          <div className="flex justify-center items-center gap-6 mt-10 mb-10 md:flex-row flex-col">
-            <button
-              type="submit"
-              className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A]
-              active:text-[#141C3A] active:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[70%] sm:w-[20%]"
-            >
-              Update Profile
-            </button>
-            <button
-              type="submit"
-              onClick={navigateToPostJob}
-              className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A]
-              active:text-[#141C3A] active:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[70%] sm:w-[20%]"
-            >
-              Back to Profile
-            </button>
+
+          <div>
+            <div className="flex justify-between">
+              <button
+                type="submit"
+                className="mt-10 mr-2 text-white bg-[#141C3A] hover:bg-[#1E293B] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+              >
+                Update
+              </button>
+              <button
+                type="button"
+                className="mt-10 ml-2 text-white bg-[#141C3A] hover:bg-[#1E293B] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+                onClick={navigateToPostJob}
+              >
+                Go Back
+              </button>
+            </div>
           </div>
         </form>
       </div>
-
-      {/* <button onClick={fetchJobs} className="border border-black">
-          fetch
-        </button> */}
       <CustomToastContainer />
     </>
   );
