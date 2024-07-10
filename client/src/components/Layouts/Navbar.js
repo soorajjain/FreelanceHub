@@ -171,13 +171,14 @@ const Navbar = () => {
                 className="ml-[-35px] md:p-2 md:px-6 p-2 px-3 hidden lg:block"
               >
                 <img
-                  className="h-14 w-14 border rounded-full"
+                  className="h-12 w-12 border rounded-full"
                   src={profile}
                   alt="Profile"
                 />
               </div>
               <button
-                className="border-[2px] border-[#023246] hover:bg-[#023246] hover:text-[#FFFFFF] rounded-3xl md:p-2 md:px-6 p-2 px-3 hidden sm:block"
+                className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A]
+              active:text-[#141C3A] active:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2.5 text-center hidden sm:block"
                 onClick={handleLogoutClick}
               >
                 Logout
@@ -208,7 +209,8 @@ const Navbar = () => {
           ) : (
             <Link
               to="/register"
-              className="border-[2px] border-[#023246] hover:bg-[#023246] hover:text-[#FFFFFF] rounded-3xl md:p-2 md:px-6 p-2 px-3 hidden sm:block"
+              className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A]
+              active:text-[#141C3A] active:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2.5 text-center hidden sm:block"
             >
               Sign Up
             </Link>

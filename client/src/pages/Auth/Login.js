@@ -45,7 +45,7 @@ const Login = () => {
         const { role } = decodedToken;
         setTimeout(() => {
           toast(
-            `Redirecting to ${
+            `🚀🚀 Redirecting to ${
               role === "freelancer" ? "freelancer" : "client"
             } dashboard`,
             {

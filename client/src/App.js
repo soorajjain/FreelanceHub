@@ -14,6 +14,7 @@ import Layout from "./components/Layouts/Layout";
 import UpdateJob from "./pages/clientJobGiver/UpdateJob";
 import UserProfile from "./pages/Auth/UserProfile";
 import EditUserProfile from "./pages/Auth/EditUserProfile";
+import NoPage from "./components/NoPage/NoPage";
 
 function App() {
   // const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
@@ -101,6 +102,8 @@ function App() {
             }
           />
           {/* Freelancer side routing ends */}
+          {/* NoPage */}
+          <Route path="*" element={<NoPage />} />
         </Routes>
       </BrowserRouter>
     </>
