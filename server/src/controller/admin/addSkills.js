@@ -3,7 +3,7 @@ import skillsModel from "../../model/skillsModel.js";
 const router = express.Router();
 import { RESPONSE } from "../../config/global.js";
 
-router.post("/", async (req, res) => {
+router.post("/post", async (req, res) => {
   try {
     let response;
 

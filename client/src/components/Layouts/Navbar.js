@@ -115,8 +115,8 @@ const Navbar = () => {
   };
 
   return (
-    <div id="home" className="w-full bg-[#F6F6F6]">
-      <nav className="Navbar max-w-[1170px] text-[#141C3A] lg:mx-auto flex justify-between py-4 sm:py-8 bg-[#F6F6F6] mx-3 ">
+    <div id="home" className="w-full bg-[#F6F6F6] h-[100px] z-60">
+      <nav className="Navbar max-w-[1170px] text-[#141C3A] lg:mx-auto flex justify-between py-4 sm:py-8 bg-[#F6F6F6] mx-3 h-[100px]">
         <div className="flex gap-10 items-center">
           {role === "client" ? (
             <>
@@ -187,7 +187,7 @@ const Navbar = () => {
           {role ? (
             <>
               <span className="hidden lg:block">
-                Hello <span>{name}</span> 👋
+                Hello <span className="font-black">{name}</span> 👋
               </span>
               <div
                 onClick={() => handleOpenProfileById(id)}

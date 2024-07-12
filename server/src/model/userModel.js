@@ -12,6 +12,9 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    company_name: {
+      type: String,
+    },
     password: {
       type: String,
       required: true,
@@ -23,6 +26,7 @@ const userSchema = new Schema(
     },
     skills: [String],
     about: String,
+    experience: String,
 
     resume: {
       type: [String],

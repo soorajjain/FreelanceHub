@@ -1,10 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import profile from "../../assets/profile.png";
+import { useNavigate } from "react-router-dom";
 
 function FindFreelancers() {
   const [users, setUsers] = useState([]);
   const [skills, setSkills] = useState([]);
+  const [selectedSkills, setSelectedSkills] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -45,99 +49,136 @@ function FindFreelancers() {
     fetchSkills();
   }, []);
 
+  const handleClick = (id) => {
+    navigate(`/user/profile/${id}`);
+  };
+
+  const handleSkillChange = (skillId) => {
+    setSelectedSkills((prev) =>
+      prev.includes(skillId)
+        ? prev.filter((s) => s !== skillId)
+        : [...prev, skillId]
+    );
+  };
+
+  const handleSearchChange = (query) => {
+    setSearchQuery(query);
+  };
+
+  const filteredUsers = users.filter((user) => {
+    const matchesSkills = selectedSkills.length
+      ? user.skills.some((skill) => selectedSkills.includes(skill))
+      : true;
+    const matchesSearch = user.user_name
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    return matchesSkills && matchesSearch;
+  });
+
   return (
-    <>
-      {users.map((user) => {
-        const jobSkills = skills.filter((skill) =>
-          user.skills.includes(skill._id)
-        );
+    <div className="flex ">
+      <div className="w-[20%] border-r border-gray-200 p-4 fixed h-full mt-[100px]">
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Search by name"
+            className="w-full rounded border p-2"
+            onChange={(e) => handleSearchChange(e.target.value)}
+          />
+        </div>
+        <h2 className="mb-2 font-bold">Filter by Skills</h2>
+        <div className="flex flex-col">
+          {skills.map((skill) => (
+            <label key={skill._id} className="mb-2">
+              <input
+                type="checkbox"
+                value={skill._id}
+                checked={selectedSkills.includes(skill._id)}
+                onChange={(e) => handleSkillChange(e.target.value)}
+                className="mr-2"
+              />
+              {skill.skill_name}
+            </label>
+          ))}
+        </div>
+      </div>
+      <div className="p-4 w-[80%] ml-[20%] mt-[100px]">
+        {filteredUsers.map((user) => {
+          const jobSkills = skills.filter((skill) =>
+            user.skills.includes(skill._id)
+          );
 
-        return (
-          <section key={user._id} className="w-screen">
-            <div className="m-4 mx-auto max-w-screen-lg rounded-md border border-gray-100 text-gray-600 shadow-md">
-              <div className="relative flex h-full flex-col text-gray-600 md:flex-row">
-                <div className="relative p-8 md:w-4/6">
-                  <div className="flex flex-col md:flex-row">
-                    <h2 className="mb-2 text-4xl font-black">
-                      {user.user_name}
-                    </h2>
-                  </div>
-                  <h3 className="mb-2 text-sm">{user.email}</h3>
-
-                  <div className="flex ">
-                    <p className="text-2xl font-black">{user.company_name}</p>
-                  </div>
-                  <p className="mt-3 font-sans text-base tracking-normal">
-                    {user.about}
-                  </p>
-                  {/* <div className="mt-8 flex flex-col sm:flex-row">
-                    <button className="mr-2 mb-4 flex cursor-pointer items-center justify-center rounded-md bg-emerald-400 py-2 px-8 text-center text-white transition duration-150 ease-in-out hover:translate-y-1 hover:bg-emerald-500">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="mr-2 h-4 w-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth="2"
+          return (
+            <section
+              key={user._id}
+              className="flex items-center justify-center"
+            >
+              <div className="m-4 mx-auto max-w-screen-lg rounded-md border border-gray-100 text-[#141c3a] shadow-md">
+                <div className="relative flex h-full flex-col text-[#141c3a] md:flex-row">
+                  <div className="relative p-8">
+                    <div className="flex flex-col md:flex-row">
+                      <h2 className="mb-2 text-3xl font-black">
+                        {user.user_name}
+                      </h2>
+                    </div>
+                    <h3 className="mb-5 text-sm">{user.email}</h3>
+                    <p className="text-xl font-black">{user.company_name}</p>
+                    <p className="mt-2 font-sans text-base tracking-normal">
+                      {user.about}
+                    </p>
+                    <div className="flex gap-2 mt-7">
+                      <button
+                        className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] active:text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[25%]"
+                        onClick={() => handleClick(user._id)}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                        />
-                      </svg>
-                      Buy now
-                    </button>
-                    <button className="mr-2 mb-4 flex cursor-pointer items-center justify-center rounded-md border py-2 px-8 text-center text-gray-500 transition duration-150 ease-in-out hover:translate-y-1 hover:bg-rose-500 hover:text-white">
-                      Preview
-                    </button>
-                  </div> */}
-                  <div className="mt-7">
-                    <a
-                      href={`http://localhost:3002/${user.resume}`}
-                      className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] active:text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[30%] "
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      View Resume
-                    </a>
-                  </div>
-
-                  <div className="mt-5 grid grid-cols-2 space-y-3 text-sm font-medium text-gray-500 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-2">
-                    {/* Additional details */}
-                    <div className="">
-                      Experience:
-                      <span className="ml-2 mr-3 rounded-full bg-blue-100 px-2 py-0.5 text-blue-900">
-                        {user.experience}
-                      </span>
+                        View Profile
+                      </button>
+                      <a
+                        href={`http://localhost:3002/${user.resume}`}
+                        className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] active:text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[25%]"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View Resume
+                      </a>
                     </div>
-                    <div className="">
-                      Skills:
-                      <span className="ml-2 mr-3 rounded-full bg-green-100 px-2 py-0.5 text-green-900">
-                        {jobSkills.map((skill) => skill.skill_name).join(", ")}
-                      </span>
+                    <div className="mt-5 grid grid-cols-2 space-y-3 w-[100%] text-sm font-medium text-gray-500 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-2">
+                      <div className="">
+                        Experience:
+                        <span className="ml-2 mr-3 rounded-full bg-blue-100 px-2 py-0.5 text-blue-900">
+                          {user.experience}
+                        </span>
+                      </div>
+                      <div className="">
+                        Skills:
+                        <span className="ml-2 mr-3 rounded-full bg-green-100 px-2 py-0.5 text-green-900">
+                          {jobSkills
+                            .map((skill) => skill.skill_name)
+                            .join(", ")}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="mx-auto flex items-center px-5 pt-1 md:p-8 z-0">
-                  <img
-                    className="block h-70px max-w-[200px] rounded-md shadow-lg"
-                    src={
-                      user &&
-                      Array.isArray(user.profile_image) &&
-                      user.profile_image.length > 0
-                        ? `http://localhost:3002/${user.profile_image}`
-                        : profile
-                    }
-                    alt="Shop image"
-                  />
+                  <div className="mx-auto flex items-center px-5 pt-1 md:p-8  z-10">
+                    <img
+                      className="block h-70px max-w-[200px] rounded-md shadow-lg"
+                      src={
+                        user &&
+                        Array.isArray(user.profile_image) &&
+                        user.profile_image.length > 0
+                          ? `http://localhost:3002/${user.profile_image}`
+                          : profile
+                      }
+                      alt="Profile"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          </section>
-        );
-      })}
-    </>
+            </section>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 

@@ -122,11 +122,12 @@ export const getJobById = async (req, res) => {
     res.json(job);
   } catch (err) {
     console.log(err);
-    res.res.json({ msg: "Something went wrong while fetching job." });
+    res.json({ msg: "Something went wrong while fetching job." });
   }
 };
 
 // Edit job by id
+
 export const editJobById = async (req, res) => {
   try {
     const {
@@ -139,14 +140,16 @@ export const editJobById = async (req, res) => {
       client,
     } = req.body;
 
-    if (!category || !mongoose.Types.ObjectId.isValid(category)) {
+    if (category && !mongoose.Types.ObjectId.isValid(category)) {
       return res.status(400).json({ msg: "Invalid Category ID" });
     }
 
-    const skills = await skillsModel.find({ _id: { $in: requirements } });
-    const selectedCategory = await categoryModel.findById(category);
+    const [skills, selectedCategory] = await Promise.all([
+      skillsModel.find({ _id: { $in: requirements } }),
+      categoryModel.findById(category),
+    ]);
 
-    if (!selectedCategory) {
+    if (category && !selectedCategory) {
       return res.status(404).json({ msg: "Category not found" });
     }
 
@@ -154,12 +157,17 @@ export const editJobById = async (req, res) => {
       title,
       description,
       requirements: skills.map((skill) => skill._id),
-      category: selectedCategory._id,
+      category: selectedCategory ? selectedCategory._id : undefined,
       budget,
       deadline,
       client,
     };
 
+    Object.keys(updateObj).forEach(
+      (key) => updateObj[key] === undefined && delete updateObj[key]
+    );
+
+    // Update the job posting
     const updatedJob = await jobPostingsModel.findByIdAndUpdate(
       req.params.id,
       updateObj,
@@ -172,8 +180,8 @@ export const editJobById = async (req, res) => {
 
     res.json(updatedJob);
   } catch (error) {
-    console.log(error);
-    res.json({ msg: "Something went wrong while updating jobs." });
+    console.error(error);
+    res.status(500).json({ msg: "Something went wrong while updating job." });
   }
 };
 
@@ -189,7 +197,7 @@ export const deleteJobById = async (req, res) => {
     res.json({ msg: "Job deleted successfully" });
   } catch (error) {
     console.log(error);
-    res.json({ msg: "Something went wrong while updating jobs." });
+    res.json({ msg: "Something went wrong while deleting job." });
   }
 };
 

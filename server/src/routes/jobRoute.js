@@ -12,9 +12,9 @@ import checkRole from "../middleware/checkRole.js";
 const router = express.Router();
 
 router.post("/postJob", authenticate, checkRole, postJob);
-router.get("/", authenticate, getAllJob);
+router.get("/", getAllJob);
 router.get("/:id", authenticate, getJobById);
-router.get("edit/:id", authenticate, editJobById);
-router.get("delete/:id", authenticate, deleteJobById);
+router.put("/edit/:id", authenticate, editJobById);
+router.delete("/delete/:id", authenticate, deleteJobById);
 
 export default router;
