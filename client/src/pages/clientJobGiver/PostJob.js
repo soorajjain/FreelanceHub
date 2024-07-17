@@ -188,12 +188,12 @@ const PostJob = () => {
 
   return (
     <>
-      <h1 className="flex justify-center items-center mt-4 sm:mt-10">
-        <span className="sm:text-[30px] text-[25px] font-serif font-bold">
+      <h1 className="flex justify-center items-center">
+        <span className="sm:text-[30px] text-[25px] font-serif font-bold mt-16 sm:mt-32">
           JOB POST FORM
         </span>
       </h1>
-      <div className="flex justify-center items-center w-full mt-10 sm:mt-14 sm:mb-2 mb-10 ">
+      <div className="flex justify-center items-center w-full mt-10 sm:mt-8 sm:mb-2 mb-10 ">
         <form
           className="grid sm:grid-cols-1 grid-cols-1 w-[80%] gap-4 justify-center items-center"
           onSubmit={handleSubmit}

@@ -3,12 +3,30 @@ import profile from "../../assets/profile.png";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const UserProfile = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [user, setUser] = useState([]);
   const [skills, setSkills] = useState([]);
+  const [tokenId, setId] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        // console.log(decodedToken);
+        if (decodedToken.role) {
+          setId(decodedToken.id);
+          console.log("role : " + decodedToken.role);
+        }
+      } catch (error) {
+        console.error("Invalid token");
+      }
+    }
+  });
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -43,8 +61,8 @@ const UserProfile = () => {
 
   const handleEditProfileById = (id) => {
     navigate(`/user/editProfile/${id}`);
-    console.log(user.profile_image);
-    console.log(user);
+    // console.log(user.profile_image);
+    // console.log(user);
   };
 
   let jobSkills = [];
@@ -55,9 +73,9 @@ const UserProfile = () => {
   return (
     <div className="bg-[#F6F6F6]">
       {/* component */}
-      <main className="profile-page">
+      <main className="profile-page ">
         <section className="static py-16 ">
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto px-4 mt-[150px]">
             <div className="relative z-0 flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg mt-10">
               <div className="px-6">
                 <div className="flex flex-wrap justify-center">
@@ -65,6 +83,7 @@ const UserProfile = () => {
                     <div className="relative">
                       <img
                         alt="profile photo"
+                        className="shadow-xl rounded-full h-[170px] align-middle object-cover border-none -m-20 -ml-24 lg:-ml-20 max-w-none"
                         src={
                           user &&
                           Array.isArray(user.profile_image) &&
@@ -72,7 +91,6 @@ const UserProfile = () => {
                             ? `http://localhost:3002/${user.profile_image}`
                             : profile
                         }
-                        className="shadow-xl rounded-full h-[170px] align-middle object-cover border-none  -m-20 -ml-24 lg:-ml-20 max-w-200-px"
                       />
                     </div>
                   </div>
@@ -121,7 +139,7 @@ const UserProfile = () => {
 
                   {user.role === "freelancer" && (
                     <div className="mt-4">
-                      <span className="text-[16px] block font-bold uppercase tracking-wide text-blueGray-600 mb-2">
+                      <span className="text-[16px] block font-bold uppercase tracking-wide text-blueGray-600 mb-5">
                         Resume
                       </span>
                       <a
@@ -135,21 +153,24 @@ const UserProfile = () => {
                     </div>
                   )}
                 </div>
-                <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
+                <div className=" py-10 border-t border-blueGray-200 text-center">
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-9/12 px-4">
                       <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
                         {user.about}
                       </p>
-                      <button
-                        onClick={() => {
-                          handleEditProfileById(user._id);
-                        }}
-                        className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] active:text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[30%] "
-                        type="button"
-                      >
-                        Edit Profile
-                      </button>
+
+                      {id === tokenId && (
+                        <button
+                          onClick={() => {
+                            handleEditProfileById(user._id);
+                          }}
+                          className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] active:text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[20%] "
+                          type="button"
+                        >
+                          Edit Profile
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>

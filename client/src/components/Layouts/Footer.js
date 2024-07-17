@@ -17,7 +17,7 @@ function Footer() {
   };
   return (
     <div>
-      <div className="border-t-[1px] border-t-[#605d5d] bg-[#F6F6F6] mt-10">
+      <div className="border-t-[1px] border-t-[#605d5d] bg-[#F6F6F6] mt-10 relative z-50">
         <div className="w-full pt-10 md:pt-5 pb-10 md:pb-5">
           <footer className="Navbar max-w-[970px] ext-[#141C3A] mx-auto justify-between  items-center md:h-[300px] flex flex-col md:flex-row bg-[#F6F6F6]">
             <div className="block-1 flex justify-center md:items-start item-center flex-col md:gap-6 gap-4 ">
@@ -76,7 +76,8 @@ function Footer() {
                   onClick={handleScroll}
                   className="hover:underline"
                 >
-                  How Freelance<br/> Hub works
+                  How Freelance
+                  <br /> Hub works
                 </a>
               </div>
             </div>

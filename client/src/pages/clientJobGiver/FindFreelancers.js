@@ -102,7 +102,7 @@ function FindFreelancers() {
           ))}
         </div>
       </div>
-      <div className="p-4 w-[80%] ml-[20%] mt-[100px]">
+      <div className="p-4 w-[80%] ml-[20%] pt-[100px]">
         {filteredUsers.map((user) => {
           const jobSkills = skills.filter((skill) =>
             user.skills.includes(skill._id)
@@ -161,7 +161,7 @@ function FindFreelancers() {
                   </div>
                   <div className="mx-auto flex items-center px-5 pt-1 md:p-8  z-10">
                     <img
-                      className="block h-70px max-w-[200px] rounded-md shadow-lg"
+                      className="block h-70px w-[200px] rounded-md shadow-lg"
                       src={
                         user &&
                         Array.isArray(user.profile_image) &&

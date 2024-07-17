@@ -6,8 +6,8 @@ function HeroSection() {
   return (
     <div className=" ">
 
-        <div className="Hero-sec max-w-[1170px] h-[600px] grid lg:grid-row-2 text-[#023246] sm:mx-12 md:mx-12 lg:mx-18 xl:mx-auto mx-6 md:grid-cols-[50%_50%] items-center">
-          <div className="flex mx-auto md:items-start items-center flex-col justify-center  sm:gap-10 gap-5">
+        <div className="Hero-sec max-w-[1170px] h-[600px] grid lg:grid-row-2 text-[#023246] sm:mx-12 md:mx-12 lg:mx-18 xl:mx-auto mx-6 md:grid-cols-[50%_50%] items-center ">
+          <div className="flex mx-auto md:items-start items-center flex-col justify-center  sm:gap-10 gap-5 mt-[100px]">
             <div className="font-serif font-bold text-[32px] lg:text-[48px]  text-center md:text-left mt-5">
               Freelance services at your fingertips!
             </div>

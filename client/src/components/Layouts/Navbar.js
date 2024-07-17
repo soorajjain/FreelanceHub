@@ -74,12 +74,12 @@ const Navbar = () => {
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
-        console.log(decodedToken);
+        // console.log(decodedToken);
         if (decodedToken.role) {
           setRole(decodedToken.role);
           setName(decodedToken.name);
           setId(decodedToken.id);
-          console.log("role : " + decodedToken.role);
+          // console.log("role : " + decodedToken.role);
         }
       } catch (error) {
         console.error("Invalid token");
@@ -115,7 +115,7 @@ const Navbar = () => {
   };
 
   return (
-    <div id="home" className="w-full bg-[#F6F6F6] h-[100px] z-60">
+    <div id="home" className="w-full bg-[#F6F6F6] h-[100px] z-50 fixed">
       <nav className="Navbar max-w-[1170px] text-[#141C3A] lg:mx-auto flex justify-between py-4 sm:py-8 bg-[#F6F6F6] mx-3 h-[100px]">
         <div className="flex gap-10 items-center">
           {role === "client" ? (
