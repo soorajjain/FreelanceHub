@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { MdErrorOutline } from "react-icons/md";
+import profile from "../../assets/profile.png";
+import { useNavigate } from "react-router-dom";
+
 
 function FindJobs() {
   const [jobs, setJobs] = useState([]);
@@ -8,69 +11,65 @@ function FindJobs() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [skills, setSkills] = useState([]);
-  const [client, setClient] = useState([]);
+  const [clients, setClients] = useState([]);
+  const navigate = useNavigate();
+
 
   const fetchJobs = async () => {
     try {
       const response = await axios.get("http://localhost:3002/api/job/");
-
       const sortedJobs = response.data.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
       setJobs(sortedJobs);
-      setClient();
     } catch (error) {
       console.error("Error while fetching jobs:", error);
-      // Handle error state in UI or log more specific details for debugging
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3002/api/admin/category"
+      );
+      setCategories(response.data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
+  const fetchSkills = async () => {
+    try {
+      const response = await axios.get("http://localhost:3002/api/admin/skill");
+      setSkills(response.data);
+    } catch (error) {
+      console.error("Error fetching skills:", error);
+    }
+  };
+
+  const fetchClients = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://localhost:3002/auth/users", {
+        headers: {
+          authorization: `${token}`,
+        },
+      });
+      setClients(response.data);
+    } catch (error) {
+      console.error("Error fetching clients:", error);
     }
   };
 
   useEffect(() => {
-    fetchJobs();
-  }, []);
-
-  useEffect(() => {
-    // Fetch categories from backend
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3002/api/admin/category"
-        );
-        // console.log("Fetched Categories: ", response.data);
-        setCategories(response.data);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-    const fetchSkills = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3002/api/admin/skill"
-        );
-        setSkills(response.data);
-      } catch (error) {
-        console.error("Error fetching skills:", error);
-      }
+    const fetchData = async () => {
+      await fetchJobs();
+      await fetchCategories();
+      await fetchSkills();
+      await fetchClients();
     };
 
-    const fetchClient = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:3002/auth/users", {
-          headers: {
-            authorization: `${token}`,
-          },
-        });
-        setClient(response.data);
-        console.table(response.data);
-      } catch (error) {
-        console.error("Error fetching skills:", error);
-      }
-    };
-
-    fetchSkills();
-    fetchClient();
-    fetchCategories();
+    fetchData();
   }, []);
 
   const handleCategoryChange = (categoryId) => {
@@ -96,13 +95,16 @@ function FindJobs() {
     return matchesCategory && matchesSearch;
   });
 
-  const getCategoryName = (categoryId) => {
-    const category = categories.find((category) => category._id === categoryId);
-    return category ? category.category_name : "Unknown Category";
-  };
+  // const getCategoryName = (categoryId) => {
+  //   const category = categories.find((category) => category._id === categoryId);
+  //   return category ? category.category_name : "Unknown Category";
+  // };
 
   const handleApply = (jobId) => {
-    console.log("eh");
+    console.log(clients);
+  };
+  const handleClick = (id) => {
+    navigate(`/user/profile/${id}`);
   };
 
   return (
@@ -138,15 +140,14 @@ function FindJobs() {
             const jobSkills = skills.filter((skill) =>
               job.requirements.includes(skill._id)
             );
-            const clientData = () => {
-              client &&
-                client.map((cl) => {
-                  if (job.client === cl._id) {
-                    console.log(cl.user_name);
-                    return cl.user_name;
-                  }
-                });
-            };
+
+            const category = categories?.find(
+              (category) => category._id === job.category
+            ) || { category_name: "Unknown Category" };
+
+            const clientDatas = clients?.find(
+              (cl) => cl._id === job.client
+            ) || { user_name: "Unknown" };
 
             return (
               <section
@@ -170,7 +171,7 @@ function FindJobs() {
                       </div>
 
                       <p className="text-xl font-black">
-                        {getCategoryName(job.category)}
+                        {category.category_name}
                       </p>
                       <div className="mt-2">
                         <span>Description : </span>
@@ -205,12 +206,33 @@ function FindJobs() {
                         </div>
                       </div>
                     </div>
-                    <div className="mx-auto flex items-center px-5 pt-1 md:p-8 z-10">
+                    <div className="mx-auto flex flex-col gap-3 items-center px-5 pt-1 md:p-8 z-10">
+                      <p className="text-l font-black">Job Posted By</p>
                       <img
-                        className="block h-70px max-w-[200px] rounded-md shadow-lg"
-                        src="https://www.google.com/imgres?q=inage%20link&imgurl=https%3A%2F%2Fcompote.slate.com%2Fimages%2F22ce4663-4205-4345-8489-bc914da1f272.jpeg%3Fcrop%3D1560%252C1040%252Cx0%252Cy0&imgrefurl=https%3A%2F%2Fslate.com%2Fculture%2F2023%2F05%2Ftears-kingdom-switch-zelda-link-character-review.html&docid=NUgwR0lsniTTRM&tbnid=2MSkattmMU6XhM&vet=12ahUKEwj-8q3itKiHAxXowTgGHbMtCiYQM3oECBwQAA..i&w=1560&h=1040&hcb=2&ved=2ahUKEwj-8q3itKiHAxXowTgGHbMtCiYQM3oECBwQAA"
-                        alt={clientData()}
+                        className="block h-50px w-[150px] rounded-md shadow-lg"
+                        src={
+                          clientDatas &&
+                          Array.isArray(clientDatas.profile_image) &&
+                          clientDatas.profile_image.length > 0
+                            ? `http://localhost:3002/${clientDatas.profile_image}`
+                            : profile
+                        }
+                        alt="Profile"
                       />
+                      <p className="text-xl font-black">
+                        {clientDatas.user_name}
+                      </p>
+                      <p className="text-sm mt-[-10px]">
+                        {clientDatas.company_name}
+                      </p>
+                      <button
+                        onClick={() => {
+                          handleClick(clientDatas._id);
+                        }}
+                        className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] active:text-white font-medium rounded-lg text-sm px-5 py-1 text-center w-[full]"
+                      >
+                        Profile
+                      </button>
                     </div>
                   </div>
                 </div>
