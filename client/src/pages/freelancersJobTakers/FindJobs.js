@@ -223,7 +223,7 @@ function FindJobs() {
                           onClick={() => {
                             handleApply(job._id);
                           }}
-                          className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] active:text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[25%]"
+                          className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] active:text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                         >
                           Apply here
                         </button>

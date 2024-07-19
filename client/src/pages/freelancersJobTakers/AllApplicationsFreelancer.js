@@ -76,35 +76,35 @@ const AllApplicationsFreelancer = () => {
   }
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center px-4">
       <h2 className="text-3xl font-bold mb-6 mt-[120px]">Applications</h2>
       {applications.map((application) => {
-        // console.log(categories)
         const category = categories.find(
           (category) => application.job_postings.category === category._id
         );
-        // console.log(category)
 
         return (
           <section
             key={application._id}
             className="flex items-center justify-center w-full"
           >
-            <div className="m-4 mx-auto w-[1000px] rounded-md border border-gray-100 text-[#141c3a] shadow-md">
-              <div className="relative grid h-full grid-cols-[70%_auto] text-[#141c3a] md:flex-row">
+            <div className="m-4 mx-auto w-full max-w-4xl rounded-md border border-gray-100 text-[#141c3a] shadow-md">
+              <div className="relative grid h-full grid-cols-1 md:grid-cols-[70%_auto] text-[#141c3a]">
                 <div className="relative p-8">
                   <div className="flex flex-col md:flex-row">
-                    <h2 className="mb-2 text-3xl font-black">
+                    <h2 className="mb-2 text-2xl md:text-3xl font-black">
                       {application.job_postings.title}
                     </h2>
                   </div>
                   <div className="flex text-sm">
                     <span>Budget: </span>
-                    <h3 className="mb-5 ml-2 mr-3 rounded-full bg-green-100 text-green-900">
-                      {application.job_postings.budget}.Rs
+                    <h3 className="mb-5 ml-2 mr-3 rounded-full bg-green-100 text-green-900 px-2 py-0.5">
+                      {application.job_postings.budget} Rs
                     </h3>
                   </div>
-                  <p className="text-xl font-black">{category.category_name}</p>
+                  <p className="text-xl font-black">
+                    {category?.category_name}
+                  </p>
                   <div className="mt-2">
                     <span>Description: </span>
                     <p className="font-sans text-base tracking-normal">
@@ -133,12 +133,12 @@ const AllApplicationsFreelancer = () => {
                   </p>
                 </div>
               </div>
-              <div className="p-8 mx-auto flex flex-col justify-center items-center">
-                <h3 className="text-2xl font-bold mb-4">Application Details</h3>
-                <p className="mb-2">Cover Letter: {application.coverLetter}</p>
+              <div className="p-8 mx-auto flex flex-col justify-center items-center gap-2 md:w-[60%]">
+                <h3 className="text-2xl font-bold mb-2">Application Details</h3>
+                <p className="mb-2 text-center"><strong>Cover Letter:</strong> {application.coverLetter}</p>
 
                 {application.status === "rejected" ? (
-                  <p className="text-xl font-black border border-red-600 p-5 my-2 text-center bg-red-300">
+                  <p className="text-xl font-black border border-red-600 p-2 px-3  my-2 text-center bg-red-300">
                     Status: {application.status}
                     {application.rejectionMessage && (
                       <p className="mt-2 text-l">
@@ -150,11 +150,13 @@ const AllApplicationsFreelancer = () => {
                     )}
                   </p>
                 ) : application.status === "hired" ? (
-                  <p className="text-xl font-black border p-5 my-2 border-green-600 text-center bg-green-300">
-                    Status: {application.status}
-                  </p>
+                  <Link to="/freelancer/project">
+                    <p className="text-xl font-black border p-2 px-3  border-green-600 text-center bg-green-300">
+                      Status: {application.status}
+                    </p>
+                  </Link>
                 ) : (
-                  <p className="text-xl font-black border p-5 my-2 text-center">
+                  <p className="text-xl font-black border p-2 px-3  my-2 text-center">
                     Status: {application.status}
                   </p>
                 )}
