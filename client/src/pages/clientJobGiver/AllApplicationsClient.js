@@ -96,7 +96,7 @@ const AllApplicationsClient = () => {
       setAcceptedApplications([...acceptedApplications, applicationId]);
       toast.success("Accepted successfully and Project Created");
       setTimeout(() => {
-        navigate(`/projects/${projectId}`);
+        navigate(`/projects`);
       }, 3000);
     } catch (error) {
       if (error.response && error.response.status === 400) {
@@ -263,22 +263,37 @@ const AllApplicationsClient = () => {
                       Applied At:{" "}
                       {new Date(application.createdAt).toLocaleString()}
                     </p>
-                    <div className="flex mt-4 mx-auto items-center justify-center">
-                      <button
-                        type="button"
-                        className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] hover:text-[#141C3A] hover:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3"
-                        onClick={() => handleAccept(application._id)}
-                      >
-                        Accept
-                      </button>
-                      <button
-                        type="button"
-                        className="text-white bg-red-500 border focus:ring-4 focus:outline-none hover:border-red-500 hover:text-red-500 hover:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                        onClick={() => openRejectionBox(application._id)}
-                      >
-                        Reject
-                      </button>
-                    </div>
+                    {application.status === "hired" ? (
+                      <div className="flex mt-4 mx-auto items-center justify-center">
+                        <button
+                          type="button"
+                          className="text-white bg-green-500 border border-green-700 focus:ring-4 focus:outline-none hover:border-[#141C3A] hover:text-[#141C3A] hover:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3"
+                          onClick={() => handleAccept(application._id)}
+                        >
+                          <strong className="">Accepted </strong>
+                        </button>
+                      </div>
+                    ) : application.status === "rejected" ? (
+                      <></>
+                    ) : (
+                      <div className="flex mt-4 mx-auto items-center justify-center">
+                        <button
+                          type="button"
+                          className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] hover:text-[#141C3A] hover:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3"
+                          onClick={() => handleAccept(application._id)}
+                        >
+                          Accept
+                        </button>
+
+                        <button
+                          type="button"
+                          className="text-white bg-red-500 border focus:ring-4 focus:outline-none hover:border-red-500 hover:text-red-500 hover:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                          onClick={() => openRejectionBox(application._id)}
+                        >
+                          Reject
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
