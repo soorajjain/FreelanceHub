@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
-import CustomToastContainer from "../../components/common/ToastContainer";
-import {jwtDecode} from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
+import CustomToastContainer from "../../components/common/ToastContainer";
 import ReactStars from "react-stars";
 
 const ProjectPageClient = () => {
@@ -19,7 +19,8 @@ const ProjectPageClient = () => {
   const [milestoneDueDate, setMilestoneDueDate] = useState("");
   const [clientId, setClientId] = useState("");
   const [review, setReview] = useState("");
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(1);
+  const [isReviewEnabled, setIsReviewEnabled] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -62,6 +63,10 @@ const ProjectPageClient = () => {
     getProjects();
   }, [clientId]);
 
+  useEffect(() => {
+    setIsReviewEnabled(currentPaymentStatus === "paid");
+  }, [currentPaymentStatus]);
+
   const handlePaymentStatusChange = (event) => {
     setCurrentPaymentStatus(event.target.value);
   };
@@ -78,6 +83,14 @@ const ProjectPageClient = () => {
 
   const handleMilestoneDueDateChange = (event) => {
     setMilestoneDueDate(event.target.value);
+  };
+
+  const handleReviewChange = (event) => {
+    setReview(event.target.value);
+  };
+
+  const handleRatingChange = (event) => {
+    setRating(event);
   };
 
   const updateProjectDetails = async (projectId) => {
@@ -106,6 +119,42 @@ const ProjectPageClient = () => {
     }
   };
 
+  const submitReviewAndRating = async (projectId) => {
+    console.log(rating, review, projectId);
+    // if (!rating) {
+    //   toast.error("Rating is mandatory!!");
+    // }
+    // if (!review) {
+    //   toast.error("Review is mandatory!!");
+    // }
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `http://localhost:3002/api/rating/${projectId}`,
+        {
+          rating,
+          review,
+        },
+        {
+          headers: {
+            authorization: `${token}`,
+          },
+        }
+      );
+
+      toast.success("Payment Status updated successfully");
+      toast.success("Review and Rating submitted successfully");
+    } catch (error) {
+      console.log(error.response.status);
+      if (error.response.status === 400) {
+        console.log("hey");
+        toast.error("Review and Rating already submitted for this project !! ");
+      }
+      console.log(error);
+    }
+  };
+
   const handleProfile = (id) => {
     navigate(`/user/profile/${id}`);
   };
@@ -128,41 +177,6 @@ const ProjectPageClient = () => {
     }
   };
 
-  const handleRatingChange = (newRating) => {
-    setRating(newRating);
-  };
-
-  const handleReviewChange = (event) => {
-    setReview(event.target.value);
-  };
-
-  const handleRatingSubmit = async (projectId) => {
-    try {
-      const token = localStorage.getItem("token");
-
-      const response = await axios.post(
-        `http://localhost:3002/api/projects/${projectId}/review`,
-        {
-          review,
-          rating,
-        },
-        {
-          headers: {
-            authorization: `${token}`,
-          },
-        }
-      );
-      console.log(response);
-
-      setReview("");
-      setRating(0);
-      toast.success("Review and rating submitted successfully");
-    } catch (error) {
-      console.log(error);
-      toast.error("Error submitting review and rating");
-    }
-  };
-
   return (
     <div className="flex flex-col items-center p-4">
       <h2 className="text-3xl font-bold mb-6 mt-[120px]">Project Overview</h2>
@@ -172,8 +186,10 @@ const ProjectPageClient = () => {
             key={project._id}
             className="w-full max-w-4xl mx-auto bg-white border border-gray-200 rounded-lg shadow-md p-6 mb-6"
           >
+            {/* Ensure project and jobPosting are defined */}
             {project && project.jobPosting && (
               <>
+                {/* Job Posting Details */}
                 <div className="mb-4">
                   <h3 className="text-2xl font-bold mb-2">
                     {project.jobPosting.title}
@@ -199,7 +215,9 @@ const ProjectPageClient = () => {
               </>
             )}
 
+            {/* Freelancer and Project Status */}
             <div className="flex flex-col md:flex-row md:space-x-6">
+              {/* Freelancer Details */}
               <div className="md:w-1/3 mb-4 md:mb-0">
                 {project.freelancer && (
                   <div className="flex flex-col items-center border p-4 rounded mb-4 text-center">
@@ -228,6 +246,7 @@ const ProjectPageClient = () => {
                 )}
               </div>
 
+              {/* Project Status, Milestones, Payment Status, and Review */}
               <div className="md:w-1/2">
                 <div className="mb-6">
                   <h4 className="text-xl font-bold mb-2">Project Status</h4>
@@ -247,52 +266,63 @@ const ProjectPageClient = () => {
                         value={milestone.description}
                         onChange={(e) => handleMilestoneUpdate(index, e)}
                         className="border p-2 rounded mb-2 w-full"
-                        placeholder={`Milestone ${index + 1}`}
+                        readOnly
                       />
                     ))
                   ) : (
-                    <p>No milestones found</p>
+                    <p>No milestones available</p>
                   )}
-                  <button
-                    onClick={() => openMilestoneCard(project._id)}
-                    className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] hover:text-[#141C3A] hover:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2 text-center mt-4"
-                  >
-                    Update Milestones
-                  </button>
                 </div>
 
                 <div className="mb-6">
-                  <h4 className="text-xl font-bold mb-2">Payment Status</h4>
+                  <h4 className="text-xl font-bold mb-2">
+                    Update Payment Status
+                  </h4>
                   <select
                     value={currentPaymentStatus}
                     onChange={handlePaymentStatusChange}
-                    className="border p-2 rounded mb-2 w-full"
+                    className="border p-2 rounded mb-4 w-full"
                   >
-                    <option value="Unpaid">Unpaid</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Paid">Paid</option>
+                    <option value="pending">Pending</option>
+                    <option value="paid">Paid</option>
                   </select>
                 </div>
 
-                {project.paymentStatus === "Paid" && (
-                  <div className="mt-4">
-                    <h4 className="text-xl font-bold mb-2">Review & Rating</h4>
-                    <textarea
-                      value={review}
-                      onChange={handleReviewChange}
-                      className="border p-2 rounded mb-2 w-full"
-                      placeholder="Write your review..."
-                    ></textarea>
-                    <ReactStars
-                      count={5}
+                {isReviewEnabled && (
+                  <div className="mb-6">
+                    <h4 className="text-xl font-bold mb-2">
+                      Review and Rating
+                    </h4>
+                    {/* <select
                       value={rating}
                       onChange={handleRatingChange}
+                      className="border p-2 rounded mb-4 w-full"
+                    >
+                      <option value={1}>1 Star</option>
+                      <option value={2}>2 Stars</option>
+                      <option value={3}>3 Stars</option>
+                      <option value={4}>4 Stars</option>
+                      <option value={5}>5 Stars</option>
+                    </select> */}
+                    <ReactStars
+                      count={5}
+                      onChange={handleRatingChange}
+                      value={rating}
                       size={24}
                       color2={"#ffd700"}
                     />
+
+                    <textarea
+                      value={review}
+                      onChange={handleReviewChange}
+                      className="border p-2 rounded mb-4 w-full"
+                      placeholder="Write your review here"
+                    />
                     <button
-                      onClick={() => handleRatingSubmit(project._id)}
-                      className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] hover:text-[#141C3A] hover:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2 text-center mt-4"
+                      onClick={() => submitReviewAndRating(project._id)}
+                      className={`text-white ${
+                        isReviewEnabled ? "bg-[#141C3A]" : "bg-gray-400"
+                      } border focus:ring-4 focus:outline-none hover:border-[#141C3A] hover:text-[#141C3A] hover:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2 text-center`}
                     >
                       Submit Review
                     </button>
@@ -300,47 +330,45 @@ const ProjectPageClient = () => {
                 )}
               </div>
             </div>
+
+            {/* Milestone Card */}
+            {isMilestoneCardVisible && (
+              <div className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div className="bg-white border border-gray-200 rounded-lg shadow-md p-6 max-w-lg mx-auto">
+                  <h3 className="text-2xl font-bold mb-4">Add Milestone</h3>
+                  <textarea
+                    value={milestoneDescription}
+                    onChange={handleMilestoneDescriptionChange}
+                    placeholder="Milestone Description"
+                    className="border p-2 rounded mb-4 w-full"
+                  />
+                  <input
+                    type="date"
+                    value={milestoneDueDate}
+                    onChange={handleMilestoneDueDateChange}
+                    className="border p-2 rounded mb-4 w-full"
+                  />
+                  <button
+                    onClick={submitMilestone}
+                    className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] hover:text-[#141C3A] hover:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2 text-center"
+                  >
+                    Submit Milestone
+                  </button>
+                  <button
+                    onClick={closeMilestoneCard}
+                    className="text-white bg-red-500 border focus:ring-4 focus:outline-none hover:border-red-700 hover:text-red-700 hover:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2 text-center mt-4"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         ))
       ) : (
         <p>No projects found</p>
       )}
-
       <CustomToastContainer />
-
-      {isMilestoneCardVisible && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
-          <div className="bg-white p-6 rounded-lg">
-            <h3 className="text-xl font-bold mb-4">Update Milestone</h3>
-            <textarea
-              value={milestoneDescription}
-              onChange={handleMilestoneDescriptionChange}
-              className="border p-2 rounded mb-2 w-full"
-              placeholder="Milestone Description"
-            ></textarea>
-            <input
-              type="date"
-              value={milestoneDueDate}
-              onChange={handleMilestoneDueDateChange}
-              className="border p-2 rounded mb-2 w-full"
-            />
-            <div className="flex justify-end">
-              <button
-                onClick={submitMilestone}
-                className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] hover:text-[#141C3A] hover:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2 text-center mr-2"
-              >
-                Submit
-              </button>
-              <button
-                onClick={closeMilestoneCard}
-                className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] hover:text-[#141C3A] hover:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2 text-center"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
