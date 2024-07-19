@@ -96,7 +96,7 @@ const AllApplicationsClient = () => {
       setAcceptedApplications([...acceptedApplications, applicationId]);
       toast.success("Accepted successfully and Project Created");
       setTimeout(() => {
-        navigate(`/projects`);
+        navigate(`/client/projects`);
       }, 3000);
     } catch (error) {
       if (error.response && error.response.status === 400) {

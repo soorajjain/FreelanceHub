@@ -28,10 +28,32 @@ export const getProjectById = async (req, res) => {
       return res.status(403).json({ msg: "Unauthorized to view project" });
     }
 
-    res.status(200).json({ project });
+    res.status(200).json(project);
   } catch (error) {
     console.error("Error fetching project:", error);
     res.json({ msg: "Something went wrong while fetching project." });
+  }
+};
+
+export const getAllProjects = async (req, res) => {
+  try {
+    // Find all projects and populate related fields
+    const projects = await Project.find()
+      .populate("jobPosting")
+      .populate("client")
+      .populate("freelancer")
+      .exec();
+
+    if (!projects || projects.length === 0) {
+      return res.status(404).json({ msg: "No projects found" });
+    }
+
+    res.status(200).json(projects);
+  } catch (error) {
+    console.error("Error fetching projects:", error);
+    res
+      .status(500)
+      .json({ msg: "Something went wrong while fetching projects." });
   }
 };
 
@@ -84,42 +106,58 @@ export const updateProjectStatus = async (req, res) => {
 
     project.status = status;
     await project.save();
-    res.status(200).json({ msg: "Project status updated", project });
+    res.status(200).json(project);
   } catch (error) {
     res.json({ msg: "Something went wrong while updating project status." });
   }
 };
 
-// Update project milestones
 export const updateProjectMilestones = async (req, res) => {
   try {
     const userId = req.user.id;
     console.log(req.user);
     const { id } = req.params;
-    const { milestones } = req.body;
+    const { milestones, paymentStatus } = req.body;
+
+    // Find the project by ID and populate related fields
     const project = await Project.findById(id)
       .populate("client")
       .populate("freelancer")
       .populate("jobPosting");
+
     if (!project) {
       return res.status(404).json({ msg: "Project not found" });
     }
 
-    // Check if the user is authorized based on their role
+    // Find the user by ID
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ msg: "User not found" });
     }
+
+    // Ensure only clients can update the project
     if (user.role !== "client") {
       return res
         .status(403)
-        .json({ msg: "Only clients can update milestones" });
+        .json({ msg: "Only clients can update milestones and payment status" });
     }
 
-    project.milestones = milestones;
+    // Update the project milestones and payment status
+    if (milestones) {
+      project.milestones = milestones;
+    }
+    if (paymentStatus) {
+      project.paymentStatus = paymentStatus;
+    }
+
+    // Save the updated project
     await project.save();
-    res.status(200).json({ msg: "Project milestones updated", project });
+
+    res.status(200).json(project);
   } catch (error) {
-    res.json({ msg: "Something went wrong while updating milestones." });
+    console.error(error);
+    res
+      .status(500)
+      .json({ msg: "Something went wrong while updating project details." });
   }
 };

@@ -1,6 +1,7 @@
 import express from "express";
 import Application from "../model/applicationModel.js";
 import projectModel from "../model/projectModel.js";
+import jobPostingsModel from "../model/jobPostingModel.js";
 
 const router = express.Router();
 
@@ -39,15 +40,12 @@ export const getApplicationByJobId = async (req, res) => {
     })
       .populate("job_postings") // Populate with the "job_postings" model (job postings)
       .populate("freelancer"); // Populate with the "user_model"
-    res.status(200).json({
-      msg: "Something went wrong while applying for job.",
-      data: applications,
-    });
+    res.status(200).json(applications);
   } catch (error) {
     res
       .status(400)
       .json({ msg: "Something went wrong while fetching aplications" });
-  }a
+  }
 };
 
 // Get applications by freelancer
@@ -58,14 +56,38 @@ export const getApplicationByFreelancerId = async (req, res) => {
     })
       .populate("job_postings") // Populate with the "job_postings" model (job postings)
       .populate("freelancer"); // Populate with the "user_model" model (freelancers/users)
-    res.status(200).json({
-      msg: "Something went wrong while applying for job.",
-      data: applications,
-    });
+    return res.status(200).json(applications);
   } catch (error) {
     res
       .status(400)
       .json({ msg: "Something went wrong while fetching applications." });
+  }
+};
+
+//get by cliemt id
+export const getApplicationByClientId = async (req, res) => {
+  try {
+    const jobPostings = await jobPostingsModel
+      .find({
+        client: req.params.clientId,
+      })
+      .select("_id");
+
+    // Extract job posting IDs
+    const jobPostingIds = jobPostings.map((posting) => posting._id);
+
+    // Find applications for those job postings
+    const applications = await Application.find({
+      job_postings: { $in: jobPostingIds },
+    })
+      .populate("job_postings") // Populate with the "job_postings" model (job postings)
+      .populate("freelancer"); // Populate with the "user_model" model (freelancers/users)
+
+    res.status(200).json(applications);
+  } catch (error) {
+    res.status(400).json({
+      msg: "Something went wrong while fetching applications by client ID.",
+    });
   }
 };
 
@@ -76,6 +98,10 @@ export const clientAccept = async (req, res) => {
     const application = await Application.findById(req.params.id);
     if (!application) {
       return res.status(404).json({ message: "Application not found" });
+    }
+
+    if (application.status === "hired") {
+      return res.status(400).json({ message: "Application already accepted" });
     }
 
     application.status = "hired";
@@ -89,9 +115,7 @@ export const clientAccept = async (req, res) => {
     });
     await project.save();
 
-    res
-      .status(200)
-      .json({ msg: "Application accepted and project created", data: project });
+    return res.status(200).json(project);
   } catch (error) {
     console.log(error);
     res
@@ -116,7 +140,7 @@ export const clientReject = async (req, res) => {
     application.rejectionMessage = rejectionMessage;
     await application.save();
 
-    res.status(200).json({ msg: "Application rejected", data: application });
+    res.status(200).json(application);
   } catch (error) {
     res
       .status(500)

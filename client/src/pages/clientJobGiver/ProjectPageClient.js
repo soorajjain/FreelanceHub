@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import CustomToastContainer from "../../components/common/ToastContainer";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const ProjectPageClient = () => {
   const navigate = useNavigate();
@@ -121,6 +122,7 @@ const ProjectPageClient = () => {
   const submitMilestone = () => {
     if (selectedProjectId) {
       updateProjectDetails(selectedProjectId);
+      toast.success("Milestone updated succesfully");
     }
   };
 

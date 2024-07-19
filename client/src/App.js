@@ -18,6 +18,7 @@ import FindFreelancers from "./pages/clientJobGiver/FindFreelancers";
 import AllApplicationsFreelancer from "./pages/freelancersJobTakers/AllApplicationsFreelancer";
 import AllApplicationsClient from "./pages/clientJobGiver/AllApplicationsClient";
 import ProjectPageClient from "./pages/clientJobGiver/ProjectPageClient";
+import ProjectPageFreelancer from "./pages/freelancersJobTakers/ProjectPageFreelancer";
 
 function App() {
   return (
@@ -108,20 +109,20 @@ function App() {
             }
           />
 
-          {/* <Route
-            path="/freelancer/findJobs"
-            element={
-              <Layout>
-                <FindJobs />
-              </Layout>
-            }
-          /> */}
-
           <Route
             path="/freelancer/applications"
             element={
               <Layout>
                 <AllApplicationsFreelancer />
+              </Layout>
+            }
+          />
+
+          <Route
+            path="/freelancer/project"
+            element={
+              <Layout>
+                <ProjectPageFreelancer />
               </Layout>
             }
           />

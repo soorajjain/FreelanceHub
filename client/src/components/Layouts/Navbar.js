@@ -166,7 +166,7 @@ const Navbar = () => {
                 Applications
               </Link>
               <Link
-                to="/freelancer/freelancerProject"
+                to="/freelancer/project"
                 className="hidden text-black hover:text-[#023246] md:block"
               >
                 Project

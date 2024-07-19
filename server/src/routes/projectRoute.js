@@ -4,12 +4,15 @@ import {
   updateProjectStatus,
   updateProjectMilestones,
   getProjectById,
+  getAllProjects,
 } from "../controller/projectController.js";
 import authenticate from "../middleware/authenticate.js";
 
 const router = express.Router();
 
 router.get("/:id", authenticate, getProjectById);
+router.get("/", authenticate, getAllProjects);
+
 router.post("/create", createProject);
 router.put("/:id/update_status", authenticate, updateProjectStatus);
 router.put("/:id/update_milestones", authenticate, updateProjectMilestones);
