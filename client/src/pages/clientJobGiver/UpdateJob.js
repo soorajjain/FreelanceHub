@@ -136,8 +136,8 @@ const PostJob = () => {
   };
   return (
     <>
-      <h1 className="flex justify-center items-center mt-4 sm:mt-10">
-        <span className="sm:text-[30px] text-[25px] font-serif font-bold">
+      <h1 className="flex justify-center items-center ">
+        <span className="sm:text-[30px] text-[25px] font-serif font-bold mt-16 sm:mt-32">
           JOB UPDATE FORM
         </span>
       </h1>

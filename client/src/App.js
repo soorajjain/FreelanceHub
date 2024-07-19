@@ -15,13 +15,11 @@ import UserProfile from "./pages/Auth/UserProfile";
 import EditUserProfile from "./pages/Auth/EditUserProfile";
 import NoPage from "./components/NoPage/NoPage";
 import FindFreelancers from "./pages/clientJobGiver/FindFreelancers";
+import AllApplicationsFreelancer from "./pages/freelancersJobTakers/AllApplicationsFreelancer";
+import AllApplicationsClient from "./pages/clientJobGiver/AllApplicationsClient";
+import ProjectPageClient from "./pages/clientJobGiver/ProjectPageClient";
 
 function App() {
-  // const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
-
-  // const handleLogout = () => {
-  //   setIsLoggedIn(false);
-  // };
   return (
     <>
       <BrowserRouter>
@@ -81,6 +79,23 @@ function App() {
               </Layout>
             }
           />
+          <Route
+            path="/client/projects/"
+            element={
+              <Layout>
+                <ProjectPageClient />
+              </Layout>
+            }
+          />
+
+          <Route
+            path="/client/applications"
+            element={
+              <Layout>
+                <AllApplicationsClient />
+              </Layout>
+            }
+          />
           {/* client side routing ends */}
 
           {/* Freelancer side routing */}
@@ -93,11 +108,20 @@ function App() {
             }
           />
 
-          <Route
+          {/* <Route
             path="/freelancer/findJobs"
             element={
               <Layout>
                 <FindJobs />
+              </Layout>
+            }
+          /> */}
+
+          <Route
+            path="/freelancer/applications"
+            element={
+              <Layout>
+                <AllApplicationsFreelancer />
               </Layout>
             }
           />

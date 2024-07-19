@@ -77,7 +77,7 @@ function FindFreelancers() {
 
   return (
     <div className="flex ">
-      <div className="w-[20%] border-r border-gray-200 p-4 fixed h-full mt-[100px]">
+      <div className="w-[20%] border-r border-gray-200 p-4 fixed h-full mt-[100px] hidden lg:block">
         <div className="mb-4">
           <input
             type="text"
@@ -102,79 +102,98 @@ function FindFreelancers() {
           ))}
         </div>
       </div>
-      <div className="p-4 w-[80%] ml-[20%] pt-[100px]">
+      <div className="p-4 lg:w-[80%] w-[90%] lg:ml-[20%] mx-auto pt-[100px]">
+        {/* serach sec for large screen */}
+        <div className=" border-gray-200 p-4 lg:hidden w-[300px] mx-auto">
+          <div className="mb-4">
+            <input
+              type="text"
+              placeholder="Search by name"
+              className="w-full rounded border p-2"
+              onChange={(e) => handleSearchChange(e.target.value)}
+            />
+          </div>
+        </div>
         {filteredUsers.map((user) => {
           const jobSkills = skills.filter((skill) =>
             user.skills.includes(skill._id)
           );
 
           return (
-            <section
-              key={user._id}
-              className="flex items-center justify-center"
-            >
-              <div className="m-4 mx-auto max-w-screen-lg rounded-md border border-gray-100 text-[#141c3a] shadow-md">
-                <div className="relative flex h-full flex-col text-[#141c3a] md:flex-row">
-                  <div className="relative p-8">
-                    <div className="flex flex-col md:flex-row">
-                      <h2 className="mb-2 text-3xl font-black">
-                        {user.user_name}
-                      </h2>
-                    </div>
-                    <h3 className="mb-5 text-sm">{user.email}</h3>
-                    <p className="text-xl font-black">{user.company_name}</p>
-                    <p className="mt-2 font-sans text-base tracking-normal">
-                      {user.about}
-                    </p>
-                    <div className="flex gap-2 mt-7">
-                      <button
-                        className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] active:text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[25%]"
-                        onClick={() => handleClick(user._id)}
-                      >
-                        View Profile
-                      </button>
-                      <a
-                        href={`http://localhost:3002/${user.resume}`}
-                        className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] active:text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[25%]"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        View Resume
-                      </a>
-                    </div>
-                    <div className="mt-5 grid grid-cols-2 space-y-3 w-[100%] text-sm font-medium text-gray-500 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-2">
-                      <div className="">
-                        Experience:
-                        <span className="ml-2 mr-3 rounded-full bg-blue-100 px-2 py-0.5 text-blue-900">
-                          {user.experience}
-                        </span>
+            <>
+              <section
+                key={user._id}
+                className="flex flex-col items-center justify-center"
+              >
+                
+
+                {/* other section */}
+
+                <div className="m-4 mx-auto max-w-screen-lg rounded-md border border-gray-100 text-[#141c3a] shadow-md">
+                  <div className="relative h-full grid text-[#141c3a]  md:grid-cols-[60%_auto] text-center md:text-left">
+                    <div className="relative p-8 order-2 md:order-1">
+                      <div className="flex flex-col lg:flex-row">
+                        <h2 className="mb-2 md:text-3xl text-2xl  font-black">
+                          {user.user_name}
+                        </h2>
                       </div>
-                      <div className="">
-                        Skills:
-                        <span className="ml-2 mr-3 rounded-full bg-green-100 px-2 py-0.5 text-green-900">
-                          {jobSkills
-                            .map((skill) => skill.skill_name)
-                            .join(", ")}
-                        </span>
+                      <h3 className="mb-5 text-sm">{user.email}</h3>
+                      <p className="md:text-xl text-l font-black">
+                        {user.company_name}
+                      </p>
+                      <p className="mt-2 font-sans text-base tracking-normal">
+                        {user.about}
+                      </p>
+                      <div className="flex flex-col md:flex-row gap-2 mt-7 mx-auto items-center">
+                        <button
+                          className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] active:text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center w-fit"
+                          onClick={() => handleClick(user._id)}
+                        >
+                          View Profile
+                        </button>
+                        <a
+                          href={`http://localhost:3002/${user.resume}`}
+                          className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] active:text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center w-fit"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          View Resume
+                        </a>
+                      </div>
+                      <div className="mt-5 space-y-3 w-[100%] text-sm font-medium text-gray-500 flex flex-col md:flex-row  md:items-center md:space-y-0 sm:space-x-2">
+                        <div className="">
+                          Experience:
+                          <span className="ml-2 mr-3 rounded-full bg-blue-100 px-2 py-0.5 text-blue-900">
+                            {user.experience}
+                          </span>
+                        </div>
+                        <div className="">
+                          Skills:
+                          <span className="ml-2 mr-3 rounded-full bg-green-100 px-2 py-0.5 text-green-900">
+                            {jobSkills
+                              .map((skill) => skill.skill_name)
+                              .join(", ")}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="mx-auto flex items-center px-5 pt-1 md:p-8  z-10">
-                    <img
-                      className="block h-70px w-[200px] rounded-md shadow-lg"
-                      src={
-                        user &&
-                        Array.isArray(user.profile_image) &&
-                        user.profile_image.length > 0
-                          ? `http://localhost:3002/${user.profile_image}`
-                          : profile
-                      }
-                      alt="Profile"
-                    />
+                    <div className="mx-auto flex items-center px-5 pt-1 md:p-8 z-10 order-1 md:order-2">
+                      <img
+                        className="block h-70px w-[200px] md:w-[300px] rounded-md shadow-lg"
+                        src={
+                          user &&
+                          Array.isArray(user.profile_image) &&
+                          user.profile_image.length > 0
+                            ? `http://localhost:3002/${user.profile_image}`
+                            : profile
+                        }
+                        alt="Profile"
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </section>
+              </section>
+            </>
           );
         })}
       </div>

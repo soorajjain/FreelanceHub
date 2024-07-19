@@ -3,7 +3,8 @@ import axios from "axios";
 import { MdErrorOutline } from "react-icons/md";
 import profile from "../../assets/profile.png";
 import { useNavigate } from "react-router-dom";
-
+import { toast } from "react-toastify";
+import CustomToastContainer from "../../components/common/ToastContainer";
 
 function FindJobs() {
   const [jobs, setJobs] = useState([]);
@@ -12,8 +13,11 @@ function FindJobs() {
   const [searchQuery, setSearchQuery] = useState("");
   const [skills, setSkills] = useState([]);
   const [clients, setClients] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentJobId, setCurrentJobId] = useState(null);
+  const [coverLetter, setCoverLetter] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const navigate = useNavigate();
-
 
   const fetchJobs = async () => {
     try {
@@ -95,14 +99,49 @@ function FindJobs() {
     return matchesCategory && matchesSearch;
   });
 
-  // const getCategoryName = (categoryId) => {
-  //   const category = categories.find((category) => category._id === categoryId);
-  //   return category ? category.category_name : "Unknown Category";
-  // };
-
   const handleApply = (jobId) => {
-    console.log(clients);
+    setCurrentJobId(jobId);
+    setIsModalOpen(true);
   };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setCoverLetter("");
+    setTermsAccepted(false);
+  };
+
+  const handleFormSubmit = async () => {
+    if (!termsAccepted) {
+      toast.error("You must accept the terms and conditions.");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `http://localhost:3002/api/application/apply/${currentJobId}`,
+        { coverLetter },
+        {
+          headers: {
+            authorization: `${token}`,
+          },
+        }
+      );
+      if (!coverLetter) {
+        toast.error("You must fill cover letter.");
+        return;
+      }
+      toast.success("Application submitted successfully.");
+      handleModalClose();
+      setTimeout(() => {
+        navigate("/freelancer/applications");
+      }, 2000);
+    } catch (error) {
+      console.error("Error submitting application:", error);
+      alert("Failed to submit application.");
+    }
+  };
+
   const handleClick = (id) => {
     navigate(`/user/profile/${id}`);
   };
@@ -154,7 +193,7 @@ function FindJobs() {
                 key={job._id}
                 className="flex items-center justify-center"
               >
-                <div className="m-4 mx-auto w-[900px] rounded-md border border-gray-100 text-[#141c3a] shadow-md">
+                <div className="m-4 mx-auto w-[1000px] rounded-md border border-gray-100 text-[#141c3a] shadow-md">
                   <div className="relative grid h-full grid-cols-[70%_auto] text-[#141c3a] md:flex-row">
                     <div className="relative p-8">
                       <div className="flex flex-col md:flex-row">
@@ -163,9 +202,9 @@ function FindJobs() {
                         </h2>
                       </div>
 
-                      <div className="flex">
+                      <div className="flex text-sm">
                         <span>Budget : </span>
-                        <h3 className="mb-5 ml-2 mr-3 rounded-full bg-green-100 px-2 py-0.5 text-green-900">
+                        <h3 className="mb-5 ml-2 mr-3 rounded-full bg-green-100  text-green-900">
                           {job.budget}.Rs
                         </h3>
                       </div>
@@ -248,8 +287,53 @@ function FindJobs() {
           </div>
         )}
       </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[30%] ">
+            <h2 className="text-2xl font-bold mb-4">Apply for Job</h2>
+            <textarea
+              placeholder="Cover Letter"
+              className="w-full p-2 mb-4 border rounded"
+              value={coverLetter}
+              onChange={(e) => setCoverLetter(e.target.value)}
+            />
+            <label className="flex items-center mb-4 ">
+              <input
+                type="checkbox"
+                checked={termsAccepted}
+                onChange={(e) => setTermsAccepted(e.target.checked)}
+                className="mr-2"
+              />
+              I accept the terms and conditions
+            </label>
+            <div className="flex justify-end">
+              <button
+                onClick={handleModalClose}
+                className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] hover:text-[#141C3A] hover:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleFormSubmit}
+                disabled={!termsAccepted}
+                className={`px-4 py-2 ${
+                  !termsAccepted
+                    ? "bg-gray-300 cursor-not-allowed text-gray-500"
+                    : "bg-red-500 text-white hover:border-red-500 hover:text-red-500 hover:bg-[#ffffff]"
+                } "  border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"`}
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      <CustomToastContainer />
     </div>
   );
 }
 
 export default FindJobs;
+
+

@@ -116,12 +116,12 @@ const Navbar = () => {
 
   return (
     <div id="home" className="w-full bg-[#F6F6F6] h-[100px] z-50 fixed">
-      <nav className="Navbar max-w-[1170px] text-[#141C3A] lg:mx-auto flex justify-between py-4 sm:py-8 bg-[#F6F6F6] mx-3 h-[100px]">
+      <nav className="Navbar max-w-[1170px] text-[#141C3A] lg:mx-auto flex justify-between py-4 lg:py-8 bg-[#F6F6F6] mx-3 h-[100px]">
         <div className="flex gap-10 items-center">
           {role === "client" ? (
             <>
               <Link to="/client/freelancers" className="px-1">
-                <img src={logo} className="sm:w-[200px] w-[150px]" alt="logo" />
+                <img src={logo} className="lg:w-[200px] w-[150px]" alt="logo" />
               </Link>
               <Link
                 to="/client/freelancers"
@@ -136,7 +136,13 @@ const Navbar = () => {
                 Post Job
               </Link>
               <Link
-                to="/client/projects"
+                to="/client/applications/"
+                className="hidden text-black hover:text-[#023246] md:block"
+              >
+                Applications
+              </Link>
+              <Link
+                to="/client/projects/"
                 className="hidden text-black hover:text-[#023246] md:block"
               >
                 Projects
@@ -144,14 +150,20 @@ const Navbar = () => {
             </>
           ) : role === "freelancer" ? (
             <>
-              <Link to="/findJobs" className="px-1">
-                <img src={logo} className="sm:w-[200px] w-[150px]" alt="logo" />
+              <Link to="/freelancer/findJobs" className="px-1">
+                <img src={logo} className="lg:w-[200px] w-[150px]" alt="logo" />
               </Link>
               <Link
                 to="/freelancer/findJobs"
                 className="hidden text-black hover:text-[#023246] md:block"
               >
                 Find Jobs
+              </Link>
+              <Link
+                to="/freelancer/applications"
+                className="hidden text-black hover:text-[#023246] md:block"
+              >
+                Applications
               </Link>
               <Link
                 to="/freelancer/freelancerProject"
@@ -163,7 +175,7 @@ const Navbar = () => {
           ) : (
             <>
               <Link to="/" className="px-1">
-                <img src={logo} className="sm:w-[200px] w-[150px]" alt="logo" />
+                <img src={logo} className="lg:w-[200px] w-[150px]" alt="logo" />
               </Link>
               <a
                 href="#how-it-works"
@@ -183,16 +195,17 @@ const Navbar = () => {
           )}
         </div>
 
-        <div className="relative flex gap-6 items-center mx-4">
+        <div className="relative gap-6 items-center mx-4 hidden lg:flex">
           {role ? (
             <>
-              <span className="hidden lg:block">
-                Hello <span className="font-black">{name}</span> 👋
-              </span>
               <div
                 onClick={() => handleOpenProfileById(id)}
-                className="ml-[-35px] md:p-2 md:px-6 p-2 px-3 hidden lg:block"
+                className="ml-[-35px] md:p-2 md:px-6 p-2 px-3 lg:flex gap-2 items-center cursor-pointer "
               >
+                <span className="hidden lg:block">
+                  Hello <span className="font-black">{name}</span> 👋
+                </span>
+
                 <img
                   className="h-12 w-12 object-cover border rounded-full"
                   src={
@@ -207,7 +220,7 @@ const Navbar = () => {
               </div>
               <button
                 className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A]
-              active:text-[#141C3A] active:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2.5 text-center hidden sm:block"
+              active:text-[#141C3A] active:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2.5 text-center hidden lg:block"
                 onClick={handleLogoutClick}
               >
                 Logout
@@ -239,14 +252,14 @@ const Navbar = () => {
             <Link
               to="/register"
               className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A]
-              active:text-[#141C3A] active:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2.5 text-center hidden sm:block"
+              active:text-[#141C3A] active:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2.5 text-center hidden lg:block"
             >
               Sign Up
             </Link>
           )}
         </div>
 
-        <div className="sm:hidden">
+        <div className="lg:hidden">
           <React.Fragment>
             <Box
               sx={{
@@ -255,10 +268,73 @@ const Navbar = () => {
                 textAlign: "center",
               }}
             >
+              <div className="relative flex items-center">
+                {role ? (
+                  <>
+                    <div
+                      onClick={() => handleOpenProfileById(id)}
+                      className="ml-[-35px] md:p-2 md:px-6 p-2 px-3 lg:flex gap-2 items-center cursor-pointer "
+                    >
+                      <span className="hidden lg:block">
+                        Hello <span className="font-black">{name}</span> 👋
+                      </span>
+
+                      <img
+                        className="h-12 w-12 object-cover border rounded-full"
+                        src={
+                          user &&
+                          Array.isArray(user.profile_image) &&
+                          user.profile_image.length > 0
+                            ? `http://localhost:3002/${user.profile_image}`
+                            : profile
+                        }
+                        alt="Profile"
+                      />
+                    </div>
+                    <button
+                      className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A]
+              active:text-[#141C3A] active:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2.5 text-center hidden lg:block"
+                      onClick={handleLogoutClick}
+                    >
+                      Logout
+                    </button>
+
+                    {showConfirmLogout && (
+                      <div className="absolute top-36 right-2 w-full h-full flex items-center justify-center text-[#023246] bg-opacity-50 z-60">
+                        <div className=" bg-white p-6 rounded-lg shadow-lg z-50">
+                          <p>Are you sure you want to logout?</p>
+                          <div className="flex gap-4 mt-4">
+                            <button
+                              className="bg-[#023246] text-white  px-4 py-2 rounded"
+                              onClick={handleLogout}
+                            >
+                              Yes, Logout
+                            </button>
+                            <button
+                              className="bg-[#023246] text-white px-4 py-2 rounded"
+                              onClick={handleCancelLogout}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <Link
+                    to="/register"
+                    className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A]
+              active:text-[#141C3A] active:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2.5 text-center hidden lg:block"
+                  >
+                    Sign Up
+                  </Link>
+                )}
+              </div>
+
               <IconButton
                 onClick={handleClick}
                 size="small"
-                sx={{ ml: 2 }}
                 aria-controls={open ? "account-menu" : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
@@ -303,7 +379,7 @@ const Navbar = () => {
             >
               {role === "client" ? (
                 <>
-                  <Link to="/freelancers">
+                  <Link to="/client/freelancers">
                     <MenuItem onClick={handleClose}>
                       <ListItemIcon>
                         <InfoIcon fontSize="small" />
@@ -314,7 +390,7 @@ const Navbar = () => {
 
                   <Divider />
 
-                  <Link to="/postJob">
+                  <Link to="/client/postJob">
                     <MenuItem onClick={handleClose}>
                       <ListItemIcon>
                         <InfoIcon fontSize="small" />
@@ -324,7 +400,18 @@ const Navbar = () => {
                   </Link>
                   <Divider />
 
-                  <Link to="/clientProject">
+                  <Link to="/client/applications">
+                    <MenuItem onClick={handleClose}>
+                      <ListItemIcon>
+                        <InfoIcon fontSize="small" />
+                      </ListItemIcon>
+                      Applications
+                    </MenuItem>
+                  </Link>
+
+                  <Divider />
+
+                  <Link to="/client/projects/">
                     <MenuItem onClick={handleClose}>
                       <ListItemIcon>
                         <InfoIcon fontSize="small" />
@@ -336,7 +423,7 @@ const Navbar = () => {
                 </>
               ) : role === "freelancer" ? (
                 <>
-                  <Link to="/findJobs">
+                  <Link to="/freelancer/findJobs">
                     <MenuItem onClick={handleClose}>
                       <ListItemIcon>
                         <InfoIcon fontSize="small" />
@@ -347,12 +434,22 @@ const Navbar = () => {
 
                   <Divider />
 
-                  <Link to="/freelancerProject">
+                  <Link to="/freelancer/applications">
                     <MenuItem onClick={handleClose}>
                       <ListItemIcon>
                         <InfoIcon fontSize="small" />
                       </ListItemIcon>
-                      Project
+                      Applications
+                    </MenuItem>
+                  </Link>
+                  <Divider />
+
+                  <Link to="/freelancer/projects">
+                    <MenuItem onClick={handleClose}>
+                      <ListItemIcon>
+                        <InfoIcon fontSize="small" />
+                      </ListItemIcon>
+                      Projects
                     </MenuItem>
                   </Link>
                   <Divider />

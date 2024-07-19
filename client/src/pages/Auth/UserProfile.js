@@ -61,8 +61,7 @@ const UserProfile = () => {
 
   const handleEditProfileById = (id) => {
     navigate(`/user/editProfile/${id}`);
-    // console.log(user.profile_image);
-    // console.log(user);
+    
   };
 
   let jobSkills = [];
@@ -71,7 +70,7 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="bg-[#F6F6F6]">
+    <div className="">
       {/* component */}
       <main className="profile-page ">
         <section className="static py-16 ">
