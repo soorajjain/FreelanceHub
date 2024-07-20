@@ -195,22 +195,7 @@ const UserProfile = () => {
                   </div>
                 </div>
 
-                {review && (
-                  <div className="border p-3 mt-5 flex flex-col gap-2 w-fit  items-center justify-center mx-auto mb-5">
-                    <div className="text-xl font-bold mb-2">
-                      {" "}
-                      Feedbacks by Clients
-                    </div>
-                    <Rating
-                      size="large"
-                      name="read-only"
-                      value={review.rating}
-                      readOnly
-                    />
-
-                    <div className="p-2 border  text-sm">{review.review}</div>
-                  </div>
-                )}
+                
               </div>
             </div>
           </div>
