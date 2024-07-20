@@ -37,19 +37,20 @@ const AllApplicationsClient = () => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-        if (!token) {
-          toast.error("Acess Denied");
-          setTimeout(() => {
-            navigate("/login");
-          }, 1000);
-        } else {
-          const decodedToken = jwtDecode(token);
-          if (decodedToken.id) {
-            setClientId(decodedToken.id);
-            // await fetchApplications();
-            await fetchCategories();
-          }
+        // if (!token) {
+        //   toast.error("Access Denied");
+        //   setTimeout(() => {
+        //     navigate("/login");
+        //   }, 1000);
+        // } else {
+
+        const decodedToken = jwtDecode(token);
+        if (decodedToken.id) {
+          setClientId(decodedToken.id);
+          // await fetchApplications();
+          await fetchCategories();
         }
+        // }
       } catch (error) {
         console.log(error);
       }

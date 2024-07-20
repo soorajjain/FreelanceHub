@@ -141,10 +141,10 @@ const PostJob = () => {
           JOB UPDATE FORM
         </span>
       </h1>
-      <div className="flex justify-center items-center w-full mt-10 sm:mt-14 sm:mb-28  mb-14">
+      <div className="flex justify-center items-center w-full mt-10 sm:mt-8 sm:mb-2 mb-10">
         <form
           onSubmit={handleSubmit}
-          className="grid sm:grid-cols-1 grid-cols-1 w-[80%] gap-4"
+          className="grid sm:grid-cols-1 grid-cols-1 w-[80%] gap-4 justify-center items-center"
         >
           <div>
             <div className="mb-5">

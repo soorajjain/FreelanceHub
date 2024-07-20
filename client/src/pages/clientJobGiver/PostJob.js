@@ -24,7 +24,12 @@ const PostJob = () => {
 
   const fetchJobs = async () => {
     try {
-      const response = await axios.get("http://localhost:3002/api/job/");
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://localhost:3002/api/job/", {
+        headers: {
+          authorization: `${token}`,
+        },
+      });
       const sortedJobs = response.data.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );

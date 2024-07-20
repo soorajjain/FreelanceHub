@@ -1,3 +1,5 @@
+// http://localhost:3000/client/projects/
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +24,7 @@ const ProjectPageClient = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
@@ -31,6 +34,11 @@ const ProjectPageClient = () => {
       } catch (error) {
         console.error("Invalid token");
       }
+    } else {
+      toast.error("Access Denied");
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
     }
   }, []);
 

@@ -1,7 +1,11 @@
+// http://localhost:3000/client/freelancers
+
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import profile from "../../assets/profile.png";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import CustomToastContainer from "../../components/common/ToastContainer";
 
 function FindFreelancers() {
   const [users, setUsers] = useState([]);
@@ -10,43 +14,53 @@ function FindFreelancers() {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
+  const fetchUsers = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://localhost:3002/auth/users", {
+        headers: {
+          authorization: `${token}`,
+        },
+      });
+      const freelancers = response.data.filter(
+        (user) => user.role === "freelancer"
+      );
+      const sortedFreelancers = freelancers.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+      setUsers(sortedFreelancers);
+    } catch (error) {
+      console.log("Error fetching users:", error);
+    }
+  };
+
+  const fetchSkills = async () => {
+    try {
+      const response = await axios.get("http://localhost:3002/api/admin/skill");
+      setSkills(response.data); // Assuming backend returns an array of skills
+    } catch (error) {
+      console.error("Error fetching skills:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get(
-          "http://localhost:3002/auth/users?role=freelancer",
-          {
-            headers: {
-              authorization: `${token}`,
-            },
-          }
-        );
-        const freelancers = response.data.filter(
-          (user) => user.role === "freelancer"
-        );
-        const sortedFreelancers = freelancers.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        );
-        setUsers(sortedFreelancers);
+        if (!token) {
+          toast.error("Access Denied");
+          setTimeout(() => {
+            navigate("/login");
+          }, 1000);
+        }
+
+        await fetchUsers();
+        await fetchSkills();
       } catch (error) {
-        console.log("Error fetching users:", error);
+        console.log(error);
       }
     };
-
-    const fetchSkills = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3002/api/admin/skill"
-        );
-        setSkills(response.data); // Assuming backend returns an array of skills
-      } catch (error) {
-        console.error("Error fetching skills:", error);
-      }
-    };
-
-    fetchUsers();
-    fetchSkills();
+    fetchData();
   }, []);
 
   const handleClick = (id) => {
@@ -125,8 +139,6 @@ function FindFreelancers() {
                 key={user._id}
                 className="flex flex-col items-center justify-center"
               >
-                
-
                 {/* other section */}
 
                 <div className="m-4 mx-auto max-w-screen-lg rounded-md border border-gray-100 text-[#141c3a] shadow-md">
@@ -197,6 +209,7 @@ function FindFreelancers() {
           );
         })}
       </div>
+      <CustomToastContainer />
     </div>
   );
 }
