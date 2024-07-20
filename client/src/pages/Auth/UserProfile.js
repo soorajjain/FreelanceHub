@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import Rating from "@mui/material/Rating";
 
 const UserProfile = () => {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ const UserProfile = () => {
   const [user, setUser] = useState([]);
   const [skills, setSkills] = useState([]);
   const [tokenId, setId] = useState(null);
+  const [review, setReview] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -27,6 +29,25 @@ const UserProfile = () => {
       }
     }
   });
+
+  const getReviewAndRating = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `http://localhost:3002/api/rating/freelancer/${id}`,
+        {
+          headers: {
+            authorization: `${token}`,
+          },
+        }
+      );
+
+      // console.log("Fetched review:", response.data);
+      setReview(response.data);
+    } catch (error) {
+      console.log("Fetching review error: " + error);
+    }
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -57,11 +78,11 @@ const UserProfile = () => {
     };
     fetchUser();
     fetchSkill();
+    getReviewAndRating();
   }, []);
 
   const handleEditProfileById = (id) => {
     navigate(`/user/editProfile/${id}`);
-    
   };
 
   let jobSkills = [];
@@ -173,6 +194,23 @@ const UserProfile = () => {
                     </div>
                   </div>
                 </div>
+
+                {review && (
+                  <div className="border p-3 mt-5 flex flex-col gap-2 w-fit  items-center justify-center mx-auto mb-5">
+                    <div className="text-xl font-bold mb-2">
+                      {" "}
+                      Feedbacks by Clients
+                    </div>
+                    <Rating
+                      size="large"
+                      name="read-only"
+                      value={review.rating}
+                      readOnly
+                    />
+
+                    <div className="p-2 border  text-sm">{review.review}</div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

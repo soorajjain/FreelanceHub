@@ -3,15 +3,14 @@ import axios from "axios";
 import CustomToastContainer from "../../components/common/ToastContainer";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import Rating from "@mui/material/Rating";
 
 const ProjectPageFreelancer = () => {
   const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
-  const [milestonesList, setMilestonesList] = useState([]);
-  const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [freelancerId, setFreelancerId] = useState("");
   const [status, setUpdateStatus] = useState("");
+  const [review, setReview] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -48,9 +47,31 @@ const ProjectPageFreelancer = () => {
     }
   };
 
+  const getReviewAndRating = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `http://localhost:3002/api/rating/freelancer/${freelancerId}`,
+        {
+          headers: {
+            authorization: `${token}`,
+          },
+        }
+      );
+
+      // console.log("Fetched review:", response.data);
+      setReview(response.data);
+    } catch (error) {
+      console.log("Fetching review error: " + error);
+    }
+  };
+
   useEffect(() => {
     getProjects();
+    getReviewAndRating();
   }, [freelancerId]);
+
+  // http://localhost:3002/api/rating/freelancer/668e5c57a76317ce06089e49
 
   const updateProjectDetails = async (projectId) => {
     try {
@@ -70,6 +91,7 @@ const ProjectPageFreelancer = () => {
       );
       // console.log(response);
       getProjects();
+      getReviewAndRating();
     } catch (error) {
       console.log(error);
     }
@@ -190,6 +212,30 @@ const ProjectPageFreelancer = () => {
                   <span className="font-bold">Last Updated Status: </span>
                   {project.status}
                 </div>
+
+                {review && project.paymentStatus === "paid" && (
+                  <div className="border p-3 mt-5 flex flex-col gap-2">
+                    <div className="text-xl font-bold mb-2">
+                      {" "}
+                      Feedback by Client
+                    </div>
+                    <div className="">
+                      <span className="font-bold">Payment : </span>
+                      PAID
+                    </div>
+                    <div>
+                      <Rating
+                        size="large"
+                        name="read-only"
+                        value={review.rating}
+                        readOnly
+                      />
+                    </div>
+                    <div className="p-2 border mt-[-10px] text-sm">
+                      {review.review}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -204,3 +250,6 @@ const ProjectPageFreelancer = () => {
 };
 
 export default ProjectPageFreelancer;
+
+
+ 

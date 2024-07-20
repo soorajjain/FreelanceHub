@@ -312,11 +312,12 @@ const ProjectPageClient = () => {
                     </select> */}
                     <ReactStars
                       count={5}
-                      onChange={handleRatingChange}
                       value={rating}
                       size={24}
                       color2={"#ffd700"}
                     />
+
+           
 
                     <textarea
                       value={review}
