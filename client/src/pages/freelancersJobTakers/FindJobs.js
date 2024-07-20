@@ -88,7 +88,7 @@ function FindJobs() {
     };
 
     fetchData();
-  }, []);
+  }, [navigate]);
 
   const handleCategoryChange = (categoryId) => {
     setSelectedCategory(categoryId);
@@ -132,7 +132,7 @@ function FindJobs() {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.post(
+      await axios.post(
         `http://localhost:3002/api/application/apply/${currentJobId}`,
         { coverLetter },
         {

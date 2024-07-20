@@ -80,7 +80,7 @@ const AllApplicationsClient = () => {
 
   useEffect(() => {
     fetchApplications();
-  }, [clientId]);
+  }, [clientId, fetchApplications]);
 
   const handleAccept = async (applicationId) => {
     try {
@@ -103,7 +103,7 @@ const AllApplicationsClient = () => {
       );
       fetchApplications();
       console.log(response.data._id);
-      const projectId = response.data._id;
+      // const projectId = response.data._id;
       setAcceptedApplications([...acceptedApplications, applicationId]);
       toast.success("Accepted successfully and Project Created");
       setTimeout(() => {

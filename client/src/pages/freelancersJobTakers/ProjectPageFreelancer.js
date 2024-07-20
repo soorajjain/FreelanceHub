@@ -78,7 +78,7 @@ const ProjectPageFreelancer = () => {
       const token = localStorage.getItem("token");
       // console.log(status);
 
-      const response = await axios.put(
+      await axios.put(
         `http://localhost:3002/api/projects/${projectId}/update_status`,
         {
           status: status,
@@ -250,6 +250,3 @@ const ProjectPageFreelancer = () => {
 };
 
 export default ProjectPageFreelancer;
-
-
- 

@@ -11,9 +11,7 @@ const ProjectPageClient = () => {
   const [projects, setProjects] = useState([]);
   const [currentPaymentStatus, setCurrentPaymentStatus] = useState("");
   const [milestonesList, setMilestonesList] = useState([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [isMilestoneCardVisible, setIsMilestoneCardVisible] = useState(false);
-  const [selectedApplicationId, setSelectedApplicationId] = useState(null);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [milestoneDescription, setMilestoneDescription] = useState("");
   const [milestoneDueDate, setMilestoneDueDate] = useState("");
@@ -89,9 +87,9 @@ const ProjectPageClient = () => {
     setReview(event.target.value);
   };
 
-  const handleRatingChange = (event) => {
-    setRating(event);
-  };
+  // const handleRatingChange = (event) => {
+  //   setRating(event);
+  // };
 
   const updateProjectDetails = async (projectId) => {
     try {
@@ -130,7 +128,7 @@ const ProjectPageClient = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.post(
+      await axios.post(
         `http://localhost:3002/api/rating/${projectId}`,
         {
           rating,
@@ -316,8 +314,6 @@ const ProjectPageClient = () => {
                       size={24}
                       color2={"#ffd700"}
                     />
-
-           
 
                     <textarea
                       value={review}
