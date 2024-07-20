@@ -48,4 +48,17 @@ export const reviewRatingPost = async (req, res) => {
   }
 };
 
+export const getReviewAndRatingFreelancer = async (req, res) => {
+  try {
+    const existingReview = await ratingsModel.findOne({
+      freelancer: req.params.id,
+    });
+
+    res.status(201).json(existingReview);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ msg: "Something went wrong while getting review." });
+  }
+};
+
 export default router;
