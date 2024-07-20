@@ -1,12 +1,14 @@
+// http://localhost:3000/client/applications/
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { MdErrorOutline } from "react-icons/md";
 import { toast } from "react-toastify";
+
 import CustomToastContainer from "../../components/common/ToastContainer";
 import profile from "../../assets/profile.png";
 import { useNavigate } from "react-router-dom";
-import { PiClubLight } from "react-icons/pi";
 
 const AllApplicationsClient = () => {
   const navigate = useNavigate();
@@ -19,21 +21,44 @@ const AllApplicationsClient = () => {
   const [currentApplicationId, setCurrentApplicationId] = useState(null);
   const [acceptedApplications, setAcceptedApplications] = useState([]);
 
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3002/api/admin/category`
+      );
+      setCategories(response.data);
+      // console.log(response.data)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
+    const fetchData = async () => {
       try {
-        const decodedToken = jwtDecode(token);
-        if (decodedToken.id) {
-          setClientId(decodedToken.id);
+        const token = localStorage.getItem("token");
+        if (!token) {
+          toast.error("Acess Denied");
+          setTimeout(() => {
+            navigate("/login");
+          }, 1000);
+        } else {
+          const decodedToken = jwtDecode(token);
+          if (decodedToken.id) {
+            setClientId(decodedToken.id);
+            // await fetchApplications();
+            await fetchCategories();
+          }
         }
       } catch (error) {
-        console.error("Invalid token");
+        console.log(error);
       }
-    }
-  }, []);
+    };
+    fetchData();
+  }, [navigate]);
 
   const fetchApplications = async () => {
+    // console.log(clientId);
     try {
       if (clientId) {
         const response = await axios.get(
@@ -55,20 +80,6 @@ const AllApplicationsClient = () => {
 
   useEffect(() => {
     fetchApplications();
-
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3002/api/admin/category`
-        );
-        setCategories(response.data);
-        // console.log(response.data)
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchCategories();
   }, [clientId]);
 
   const handleAccept = async (applicationId) => {
@@ -168,7 +179,7 @@ const AllApplicationsClient = () => {
     return (
       <div className="h-[80vh] w-full flex justify-center items-center">
         <h1 className="text-[30px]">
-          <MdErrorOutline className="ml-20" />
+          <MdErrorOutline className="ml-32" />
           <span>No Applications Found</span>
         </h1>
       </div>

@@ -21,7 +21,13 @@ function FindJobs() {
 
   const fetchJobs = async () => {
     try {
-      const response = await axios.get("http://localhost:3002/api/job/");
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://localhost:3002/api/job/", {
+        headers: {
+          authorization: `${token}`,
+        },
+      });
+      // console.log(response.data);
       const sortedJobs = response.data.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
@@ -67,6 +73,14 @@ function FindJobs() {
 
   useEffect(() => {
     const fetchData = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("access denied!!");
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+      }
+
       await fetchJobs();
       await fetchCategories();
       await fetchSkills();
@@ -335,5 +349,3 @@ function FindJobs() {
 }
 
 export default FindJobs;
-
-

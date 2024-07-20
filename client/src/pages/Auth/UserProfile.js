@@ -28,26 +28,7 @@ const UserProfile = () => {
         console.error("Invalid token");
       }
     }
-  });
-
-  const getReviewAndRating = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get(
-        `http://localhost:3002/api/rating/freelancer/${id}`,
-        {
-          headers: {
-            authorization: `${token}`,
-          },
-        }
-      );
-
-      // console.log("Fetched review:", response.data);
-      setReview(response.data);
-    } catch (error) {
-      console.log("Fetching review error: " + error);
-    }
-  };
+  }, []);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -76,10 +57,28 @@ const UserProfile = () => {
         console.log("setSkills" + error);
       }
     };
+
+    const getReviewAndRating = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          `http://localhost:3002/api/rating/freelancer/${id}`,
+          {
+            headers: {
+              authorization: `${token}`,
+            },
+          }
+        );
+        // console.log("Fetched review:", response.data);
+        setReview(response.data);
+      } catch (error) {
+        console.log("Fetching review error: " + error);
+      }
+    };
     fetchUser();
     fetchSkill();
     getReviewAndRating();
-  }, []);
+  }, [id]);
 
   const handleEditProfileById = (id) => {
     navigate(`/user/editProfile/${id}`);
@@ -102,7 +101,6 @@ const UserProfile = () => {
                   <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
                     <div className="relative">
                       <img
-                        alt="profile photo"
                         className="shadow-xl rounded-full h-[170px] align-middle object-cover border-none -m-20 -ml-24 lg:-ml-20 max-w-none"
                         src={
                           user &&
@@ -111,6 +109,7 @@ const UserProfile = () => {
                             ? `http://localhost:3002/${user.profile_image}`
                             : profile
                         }
+                        alt="profile"
                       />
                     </div>
                   </div>
