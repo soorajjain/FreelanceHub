@@ -266,12 +266,18 @@ const ProjectPageClient = () => {
                         value={milestone.description}
                         onChange={(e) => handleMilestoneUpdate(index, e)}
                         className="border p-2 rounded mb-2 w-full"
-                        readOnly
+                        placeholder={`Milestone ${index + 1}`}
                       />
                     ))
                   ) : (
-                    <p>No milestones available</p>
+                    <p>No milestones found</p>
                   )}
+                  <button
+                    onClick={() => openMilestoneCard(project._id)}
+                    className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] hover:text-[#141C3A] hover:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2 text-center"
+                  >
+                    Add/Update Milestones
+                  </button>
                 </div>
 
                 <div className="mb-6">
@@ -348,18 +354,20 @@ const ProjectPageClient = () => {
                     onChange={handleMilestoneDueDateChange}
                     className="border p-2 rounded mb-4 w-full"
                   />
-                  <button
-                    onClick={submitMilestone}
-                    className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] hover:text-[#141C3A] hover:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2 text-center"
-                  >
-                    Submit Milestone
-                  </button>
-                  <button
-                    onClick={closeMilestoneCard}
-                    className="text-white bg-red-500 border focus:ring-4 focus:outline-none hover:border-red-700 hover:text-red-700 hover:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2 text-center mt-4"
-                  >
-                    Close
-                  </button>
+                  <div className="flex items-end justify-end gap-2">
+                    <button
+                      onClick={submitMilestone}
+                      className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] hover:text-[#141C3A] hover:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2 text-center"
+                    >
+                      Submit Milestone
+                    </button>
+                    <button
+                      onClick={closeMilestoneCard}
+                      className="text-white bg-red-500 border focus:ring-4 focus:outline-none hover:border-red-700 hover:text-red-700 hover:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2 text-center mt-4"
+                    >
+                      Close
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
