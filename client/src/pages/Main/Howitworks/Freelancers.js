@@ -17,7 +17,7 @@ function Freelancers() {
             Create your Freelancer profile easily.
           </div>
           <Link
-            to="/Contact"
+            to="/login"
             className="border-[2px] border-[#023246]  hover:bg-[#023246] hover:text-[#FFFFFF] rounded-3xl md:p-2 md:px-6 p-2 px-5"
           >
             Get Started

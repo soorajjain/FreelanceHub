@@ -51,13 +51,14 @@ function Footer() {
                 >
                   Home
                 </a>
-                <Link to="/redirect" className="hover:underline">
+
+                <Link to="/client/postJob" className="hover:underline">
                   Post a Job
                 </Link>
-                <Link to="/redirect" className="hover:underline">
+                <Link to="/client/freelancers" className="hover:underline">
                   Find a Freelancer
                 </Link>
-                <Link to="/redirect" className="hover:underline">
+                <Link to="/freelancer/findJobs" className="hover:underline">
                   Find a Job
                 </Link>
               </div>
