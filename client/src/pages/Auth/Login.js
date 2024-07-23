@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import { login } from "../../api/auth";
 import CustomToastContainer from "../../components/common/ToastContainer";
 import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 const theme = createTheme();
 
@@ -27,7 +28,12 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const res = await login({ email, password });
+      const res = await axios.post("http://localhost:3002/auth/users/login", {
+        email,
+        password,
+      });
+
+      console.log(res);
       toast.success("Login successful!", {
         position: "top-right",
         autoClose: 5000,

@@ -250,11 +250,11 @@ const Navbar = () => {
             </>
           ) : (
             <Link
-              to="/register"
+              to="/login"
               className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A]
               active:text-[#141C3A] active:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2.5 text-center hidden lg:block"
             >
-              Sign Up
+              Sign In
             </Link>
           )}
         </div>
@@ -323,11 +323,11 @@ const Navbar = () => {
                   </>
                 ) : (
                   <Link
-                    to="/register"
+                    to="/login"
                     className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A]
               active:text-[#141C3A] active:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2.5 text-center hidden lg:block"
                   >
-                    Sign Up
+                    Sign In
                   </Link>
                 )}
               </div>
@@ -512,12 +512,12 @@ const Navbar = () => {
                     )}
                   </>
                 ) : (
-                  <Link to="/register">
+                  <Link to="/login">
                     <MenuItem onClick={handleClose}>
                       <ListItemIcon>
                         <LoginIcon fontSize="small" />
                       </ListItemIcon>
-                      Sign Up
+                      Sign In
                     </MenuItem>
                   </Link>
                 )}

@@ -6,7 +6,7 @@ import Freelancers from "./Freelancers";
 function Howitwork() {
   const [toggle, setToggle] = useState("Freelancers");
   return (
-    <div id="how-it-works" className="bg-[#F6F6F6] pb-20 md:pb-0">
+    <div  className="bg-[#F6F6F6] pb-20 md:pb-0">
       <div className="howitwork max-w-[1170px] mx-auto text-[#141C3A] flex justify-center items-center flex-col">
         <div className="flex flex-col gap-5 md:gap-10 sm:mx-12 md:mx-12 lg:mx-auto mx-6 ">
           <h1 className=" font-serif text-[28px] md:text-4xl font-bold text-center mt-20 sm:mt-10">

@@ -66,11 +66,16 @@ const AllApplicationsFreelancer = () => {
 
   if (applications.length === 0) {
     return (
-      <div className="h-[80vh] w-full flex justify-center items-center">
-        <h1 className="text-[30px]">
-          <MdErrorOutline className="ml-20" />
-          <span>No Applications Found</span>
-        </h1>
+      <div className="h-[80vh] w-full flex flex-col justify-center items-center gap-4">
+        <MdErrorOutline className="text-3xl" />
+        <span className="text-3xl">No Applications Found</span>
+        <Link
+          to="/freelancer/findJobs"
+          className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A]
+              active:text-[#141C3A] active:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2.5 text-center hidden lg:block"
+        >
+          Apply Here
+        </Link>
       </div>
     );
   }
@@ -135,7 +140,9 @@ const AllApplicationsFreelancer = () => {
               </div>
               <div className="p-8 mx-auto flex flex-col justify-center items-center gap-2 md:w-[60%]">
                 <h3 className="text-2xl font-bold mb-2">Application Details</h3>
-                <p className="mb-2 text-center"><strong>Cover Letter:</strong> {application.coverLetter}</p>
+                <p className="mb-2 text-center">
+                  <strong>Cover Letter:</strong> {application.coverLetter}
+                </p>
 
                 {application.status === "rejected" ? (
                   <p className="text-xl font-black border border-red-600 p-2 px-3  my-2 text-center bg-red-300">

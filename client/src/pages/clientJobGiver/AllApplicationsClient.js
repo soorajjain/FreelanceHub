@@ -178,18 +178,18 @@ const AllApplicationsClient = () => {
 
   if (applications.length === 0) {
     return (
-      <div className="h-[80vh] w-full flex justify-center items-center">
-        <h1 className="text-[30px]">
-          <MdErrorOutline className="ml-32" />
-          <span>No Applications Found</span>
-        </h1>
+      <div className="h-[80vh] w-full flex flex-col justify-center items-center gap-4">
+        <MdErrorOutline className="text-3xl" />
+        <span className="text-3xl">No Applications Found</span>
       </div>
     );
   }
 
   return (
     <div className="flex flex-col items-center">
-      <h2 className="text-3xl font-bold mb-6 mt-[120px]">Applications</h2>
+      <h2 className="md:text-3xl text-2xl font-bold mb-6 mt-[120px]">
+        Applications
+      </h2>
       {applications.map((application) => {
         const category = categories.find(
           (category) => application.job_postings.category === category._id
@@ -200,8 +200,8 @@ const AllApplicationsClient = () => {
             key={application._id}
             className="flex flex-col items-center justify-center w-full"
           >
-            <div className="m-4 mx-auto w-[1000px] rounded-md border border-gray-100 text-[#141c3a] shadow-md">
-              <div className="relative p-8 flex flex-col md:flex-row">
+            <div className="m-4 mx-auto w-[90%] md:w-[60%] rounded-md border border-gray-100 text-[#141c3a] shadow-md">
+              <div className="relative p-8 flex flex-col md:flex-row gap-8">
                 <div className="flex flex-col items-center md:w-1/3 ">
                   <img
                     src={
@@ -216,7 +216,7 @@ const AllApplicationsClient = () => {
                   />
 
                   <div className="flex flex-col text-center gap-2">
-                    <p className="text-xl font-black">
+                    <p className=" text-lg font-black">
                       {application.freelancer.user_name}
                     </p>
                     <p className="text-sm">{application.freelancer.email}</p>
@@ -236,7 +236,7 @@ const AllApplicationsClient = () => {
                 </div>
                 <div className="md:w-2/3 md:pl-8">
                   <div className="flex flex-col md:flex-row">
-                    <h2 className="mb-2 text-3xl font-black">
+                    <h2 className="mb-2 md:text-3xl text-2xl font-black">
                       {application.job_postings.title}
                     </h2>
                   </div>
@@ -246,10 +246,12 @@ const AllApplicationsClient = () => {
                       {application.job_postings.budget}.Rs
                     </h3>
                   </div>
-                  <p className="text-xl font-black">{category.category_name}</p>
+                  <p className="md:text-xl text-lg font-black">
+                    {category.category_name}
+                  </p>
                   <div className="mt-2">
-                    <span>Description: </span>
-                    <p className="font-sans text-base tracking-normal">
+                    <span className="md:text-base text-sm">Description: </span>
+                    <p className="font-sans md:text-base text-sm tracking-normal">
                       {application.job_postings.description}
                     </p>
                   </div>
@@ -264,10 +266,12 @@ const AllApplicationsClient = () => {
                     </div>
                   </div>
                   <div className="mt-5 border w-fit p-5 px-10 text-center">
-                    <p className="text-2xl font-bold mb-4">
+                    <p className="md:text-2xl text-xl font-bold mb-4">
                       Application Details
                     </p>
-                    <p>Cover Letter: {application.coverLetter}</p>
+                    <p className="md:text-lg text-sm">
+                      Cover Letter: {application.coverLetter}
+                    </p>
                     <p className="text-xl font-black border p-2 my-2">
                       Status: {application.status}
                     </p>

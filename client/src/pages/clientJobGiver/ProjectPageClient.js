@@ -19,7 +19,7 @@ const ProjectPageClient = () => {
   const [milestoneDueDate, setMilestoneDueDate] = useState("");
   const [clientId, setClientId] = useState("");
   const [review, setReview] = useState("");
-  const [rating, setRating] = useState(1);
+  const [rating] = useState(1);
   const [isReviewEnabled, setIsReviewEnabled] = useState(false);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const ProjectPageClient = () => {
         navigate("/login");
       }, 1000);
     }
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     const getProjects = async () => {
@@ -75,6 +75,7 @@ const ProjectPageClient = () => {
 
   const handlePaymentStatusChange = (event) => {
     setCurrentPaymentStatus(event.target.value);
+    console.log(event.target.value);
   };
 
   const handleMilestoneUpdate = (index, event) => {
@@ -102,6 +103,7 @@ const ProjectPageClient = () => {
   const updateProjectDetails = async (projectId) => {
     try {
       const token = localStorage.getItem("token");
+      console.log(currentPaymentStatus);
 
       const response = await axios.put(
         `http://localhost:3002/api/projects/${projectId}/update_milestones`,
@@ -127,6 +129,7 @@ const ProjectPageClient = () => {
 
   const submitReviewAndRating = async (projectId) => {
     console.log(rating, review, projectId);
+
     // if (!rating) {
     //   toast.error("Rating is mandatory!!");
     // }
@@ -148,9 +151,11 @@ const ProjectPageClient = () => {
           },
         }
       );
-
+      await updateProjectDetails(projectId);
       toast.success("Payment Status updated successfully");
-      toast.success("Review and Rating submitted successfully");
+      setTimeout(() => {
+        toast.success("Review and Rating submitted successfully");
+      }, 1000);
     } catch (error) {
       console.log(error.response.status);
       if (error.response.status === 400) {

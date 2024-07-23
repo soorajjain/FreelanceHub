@@ -150,8 +150,8 @@ const EditUserProfile = () => {
 
   return (
     <>
-      <h1 className="flex justify-center items-center mt-4 sm:mt-10">
-        <span className="sm:text-[30px] text-[25px] font-serif font-bold">
+      <h1 className="flex justify-center items-center">
+        <span className="sm:text-[30px] text-[25px] font-serif font-bold mt-32 sm:mt-32">
           USER PROFILE UPDATE
         </span>
       </h1>

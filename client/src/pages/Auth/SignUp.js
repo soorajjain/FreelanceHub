@@ -19,6 +19,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { toast } from "react-toastify";
 import { register } from "../../api/auth";
 import CustomToastContainer from "../../components/common/ToastContainer";
+import axios from "axios";
 
 const theme = createTheme();
 
@@ -32,7 +33,10 @@ const Register = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const res = await register({ user_name, role, email, password });
+      const res = await axios.post(
+        "http://localhost:3002/auth/users/register",
+        { user_name, role, email, password }
+      );
       toast.success("Registration successful!", {
         position: "top-right",
         autoClose: 5000,

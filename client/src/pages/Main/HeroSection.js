@@ -16,6 +16,7 @@ function HeroSection() {
           </div>
           <Link
             to="/Contact"
+            id="how-it-works"
             className="border-[2px] border-[#023246]  hover:bg-[#023246] hover:text-[#FFFFFF] rounded-3xl lg:p-2 lg:px-8 p-2 px-5 text-sm sm:text-base "
           >
             Get Started

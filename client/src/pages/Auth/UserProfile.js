@@ -127,8 +127,8 @@ const UserProfile = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="w-full lg:w-4/12 px-4 lg:order-1 md:mt-[40px]">
-                    <div className="flex justify-center py-4 lg:pt-4 pt-8">
+                  <div className="w-full lg:w-4/12 px-4 lg:order-1 lg:mt-[40px]">
+                    <div className="flex justify-center py-4 lg:pt-8 pt-8">
                       <div className="mr-4 p-3 text-center ">
                         <span className="text-[16px] block font-bold uppercase tracking-wide text-blueGray-600">
                           Experience
@@ -172,25 +172,24 @@ const UserProfile = () => {
                     </div>
                   )}
                 </div>
-                <div className=" py-10 border-t border-blueGray-200 text-center">
-                  <div className="flex flex-wrap justify-center">
-                    <div className="w-full lg:w-9/12 px-4">
-                      <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
-                        {user.about}
-                      </p>
 
-                      {id === tokenId && (
-                        <button
-                          onClick={() => {
-                            handleEditProfileById(user._id);
-                          }}
-                          className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] active:text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[20%] "
-                          type="button"
-                        >
-                          Edit Profile
-                        </button>
-                      )}
-                    </div>
+                <div className="flex flex-wrap justify-center text-center py-10">
+                  <div className="w-full lg:w-9/12 px-4">
+                    <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
+                      {user.about}
+                    </p>
+
+                    {id === tokenId && (
+                      <button
+                        onClick={() => {
+                          handleEditProfileById(user._id);
+                        }}
+                        className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] active:text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center md:w-[20%] "
+                        type="button"
+                      >
+                        Edit Profile
+                      </button>
+                    )}
                   </div>
                 </div>
 
