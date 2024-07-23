@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import profile from "../../assets/profile.png"
+import profile from "../../assets/profile.png";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import CustomToastContainer from "../../components/common/ToastContainer";

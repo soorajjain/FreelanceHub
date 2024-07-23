@@ -17,7 +17,7 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { toast } from "react-toastify";
-import { register } from "../../api/auth";
+
 import CustomToastContainer from "../../components/common/ToastContainer";
 import axios from "axios";
 

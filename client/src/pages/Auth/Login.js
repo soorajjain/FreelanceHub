@@ -13,7 +13,7 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { toast } from "react-toastify";
-import { login } from "../../api/auth";
+
 import CustomToastContainer from "../../components/common/ToastContainer";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
