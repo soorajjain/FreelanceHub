@@ -75,7 +75,7 @@ export const createProject = async (req, res) => {
 export const updateProjectStatus = async (req, res) => {
   try {
     const userId = req.user.id;
-    console.log(req.user);
+    // console.log(req.user);
     const { id } = req.params;
     const { status } = req.body;
     const project = await Project.findById(id)
@@ -115,7 +115,7 @@ export const updateProjectStatus = async (req, res) => {
 export const updateProjectMilestones = async (req, res) => {
   try {
     const userId = req.user.id;
-    console.log(req.user);
+    // console.log(req.user);
     const { id } = req.params;
     const { milestones, paymentStatus } = req.body;
 

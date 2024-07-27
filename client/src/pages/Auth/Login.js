@@ -17,6 +17,7 @@ import { toast } from "react-toastify";
 import CustomToastContainer from "../../components/common/ToastContainer";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import { CloseFullscreen } from "@mui/icons-material";
 
 const theme = createTheme();
 
@@ -48,6 +49,7 @@ const Login = () => {
       if (token) {
         localStorage.setItem("token", token);
         const decodedToken = jwtDecode(token);
+        console.log(decodedToken);
         const { role } = decodedToken;
         setTimeout(() => {
           toast(
