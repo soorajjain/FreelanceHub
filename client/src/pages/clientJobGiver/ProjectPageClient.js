@@ -1,12 +1,11 @@
-// http://localhost:3000/client/projects/
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; // Import without curly braces
 import { toast } from "react-toastify";
 import CustomToastContainer from "../../components/common/ToastContainer";
 import ReactStars from "react-stars";
+import BraintreeDropIn from "../../components/Payment/BraintreeDropIn";
 
 const ProjectPageClient = () => {
   const navigate = useNavigate();
@@ -19,8 +18,14 @@ const ProjectPageClient = () => {
   const [milestoneDueDate, setMilestoneDueDate] = useState("");
   const [clientId, setClientId] = useState("");
   const [review, setReview] = useState("");
-  const [rating] = useState(1);
+  const [showDropIn, setShowDropIn] = useState(false);
+  const [amount, setAmount] = useState("");
+  const [rating, setRating] = useState(1); // Initialize rating state
   const [isReviewEnabled, setIsReviewEnabled] = useState(false);
+
+  useEffect(() => {
+    console.log("showDropIn state:", showDropIn);
+  }, [showDropIn]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -96,10 +101,6 @@ const ProjectPageClient = () => {
     setReview(event.target.value);
   };
 
-  // const handleRatingChange = (event) => {
-  //   setRating(event);
-  // };
-
   const updateProjectDetails = async (projectId) => {
     try {
       const token = localStorage.getItem("token");
@@ -130,12 +131,12 @@ const ProjectPageClient = () => {
   const submitReviewAndRating = async (projectId) => {
     console.log(rating, review, projectId);
 
-    // if (!rating) {
-    //   toast.error("Rating is mandatory!!");
-    // }
-    // if (!review) {
-    //   toast.error("Review is mandatory!!");
-    // }
+    if (!rating) {
+      toast.error("Rating is mandatory!!");
+    }
+    if (!review) {
+      toast.error("Review is mandatory!!");
+    }
 
     try {
       const token = localStorage.getItem("token");
@@ -152,14 +153,10 @@ const ProjectPageClient = () => {
         }
       );
       await updateProjectDetails(projectId);
-      toast.success("Payment Status updated successfully");
-      setTimeout(() => {
-        toast.success("Review and Rating submitted successfully");
-      }, 1000);
+      toast.success("Review and Rating submitted successfully");
     } catch (error) {
       console.log(error.response.status);
       if (error.response.status === 400) {
-        console.log("hey");
         toast.error("Review and Rating already submitted for this project !! ");
       }
       console.log(error);
@@ -188,6 +185,18 @@ const ProjectPageClient = () => {
     }
   };
 
+  const handlePayment = (jobAmount) => {
+    console.log("hey inide handle ayment");
+    setAmount(jobAmount);
+    setShowDropIn(true);
+  };
+
+  const handlePaymentCompleted = () => {
+    setShowDropIn(false);
+    setCurrentPaymentStatus("paid");
+    toast.success("Payment completed successfully!");
+  };
+
   return (
     <div className="flex flex-col items-center p-4">
       <h2 className="text-3xl font-bold mb-6 mt-[120px]">Project Overview</h2>
@@ -197,10 +206,8 @@ const ProjectPageClient = () => {
             key={project._id}
             className="w-full max-w-4xl mx-auto bg-white border border-gray-200 rounded-lg shadow-md p-6 mb-6"
           >
-            {/* Ensure project and jobPosting are defined */}
             {project && project.jobPosting && (
               <>
-                {/* Job Posting Details */}
                 <div className="mb-4">
                   <h3 className="text-2xl font-bold mb-2">
                     {project.jobPosting.title}
@@ -226,9 +233,7 @@ const ProjectPageClient = () => {
               </>
             )}
 
-            {/* Freelancer and Project Status */}
             <div className="flex flex-col md:flex-row md:space-x-6">
-              {/* Freelancer Details */}
               <div className="md:w-1/3 mb-4 md:mb-0">
                 {project.freelancer && (
                   <div className="flex flex-col items-center border p-4 rounded mb-4 text-center">
@@ -257,7 +262,6 @@ const ProjectPageClient = () => {
                 )}
               </div>
 
-              {/* Project Status, Milestones, Payment Status, and Review */}
               <div className="md:w-1/2">
                 <div className="mb-6">
                   <h4 className="text-xl font-bold mb-2">Project Status</h4>
@@ -295,14 +299,12 @@ const ProjectPageClient = () => {
                   <h4 className="text-xl font-bold mb-2">
                     Update Payment Status
                   </h4>
-                  <select
-                    value={currentPaymentStatus}
-                    onChange={handlePaymentStatusChange}
-                    className="border p-2 rounded mb-4 w-full"
+                  <button
+                    onClick={() => handlePayment(project.jobPosting.budget)}
+                    className="text-white bg-[#141C3A] border focus:ring-4 focus:outline-none hover:border-[#141C3A] hover:text-[#141C3A] hover:bg-[#ffffff] font-medium rounded-lg text-sm px-5 py-2 text-center"
                   >
-                    <option value="pending">Pending</option>
-                    <option value="paid">Paid</option>
-                  </select>
+                    Pay Freelancer
+                  </button>
                 </div>
 
                 {isReviewEnabled && (
@@ -310,20 +312,10 @@ const ProjectPageClient = () => {
                     <h4 className="text-xl font-bold mb-2">
                       Review and Rating
                     </h4>
-                    {/* <select
-                      value={rating}
-                      onChange={handleRatingChange}
-                      className="border p-2 rounded mb-4 w-full"
-                    >
-                      <option value={1}>1 Star</option>
-                      <option value={2}>2 Stars</option>
-                      <option value={3}>3 Stars</option>
-                      <option value={4}>4 Stars</option>
-                      <option value={5}>5 Stars</option>
-                    </select> */}
                     <ReactStars
                       count={5}
                       value={rating}
+                      onChange={setRating}
                       size={24}
                       color2={"#ffd700"}
                     />
@@ -347,7 +339,6 @@ const ProjectPageClient = () => {
               </div>
             </div>
 
-            {/* Milestone Card */}
             {isMilestoneCardVisible && (
               <div className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                 <div className="bg-white border border-gray-200 rounded-lg shadow-md p-6 max-w-lg mx-auto">
@@ -387,6 +378,13 @@ const ProjectPageClient = () => {
         <p>No projects found</p>
       )}
       <CustomToastContainer />
+
+      {showDropIn && (
+        <BraintreeDropIn
+          show={showDropIn}
+          onPaymentCompleted={handlePaymentCompleted}
+        />
+      )}
     </div>
   );
 };
