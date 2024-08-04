@@ -25,6 +25,7 @@ import jobRoute from "./src/routes/jobRoute.js";
 import ratingRoute from "./src/routes/ratingRoute.js";
 import applicationRoute from "./src/routes/applicationRoute.js";
 import adminHandles from "./src/controller/admin/apiHandler.js";
+import paymentRoutes from "./src/routes/payment.js";
 
 app.use("/auth/users", authRoutes);
 app.use("/api/projects", projectRoutes);
@@ -32,6 +33,7 @@ app.use("/api/job", jobRoute);
 app.use("/api/rating", ratingRoute);
 app.use("/api/application", applicationRoute);
 app.use("/api/admin", adminHandles);
+app.use("/api/payment", paymentRoutes);
 
 // routing ends here
 

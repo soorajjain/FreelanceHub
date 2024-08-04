@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { Schema } from "mongoose";
 
 const jobPostingSchema = new mongoose.Schema(
   {
@@ -32,10 +31,6 @@ const jobPostingSchema = new mongoose.Schema(
     client: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user_models",
-    },
-    banner_image: {
-      type: [String],
-      required: "true",
     },
   },
   { timestamps: true }

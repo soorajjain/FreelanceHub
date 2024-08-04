@@ -94,7 +94,7 @@ export const getApplicationByClientId = async (req, res) => {
 // params id will be application
 export const clientAccept = async (req, res) => {
   try {
-    console.log(req.user);
+    // console.log(req.user);
     const application = await Application.findById(req.params.id);
     if (!application) {
       return res.status(404).json({ message: "Application not found" });
