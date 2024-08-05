@@ -25,12 +25,16 @@ import axios from "axios";
 const theme = createTheme();
 
 const Register = () => {
-  const [user_name, setName] = useState("");
-  const [role, setRole] = useState("freelancer");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState("");
+  const [formData, setFormData] = useState({
+    user_name: "",
+    role: "freelancer",
+    email: "",
+    password: "",
+  });
+
+  const [errorMessage, setErrorMessage] = useState(""); // for error messsage of validator
+  const [errors, setErrors] = useState({}); // for Whole form validation
 
   const validate = (value) => {
     if (
@@ -48,15 +52,32 @@ const Register = () => {
     }
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
   const handleSubmit = async (event) => {
-    if (user_name && user_name.length < 4) {
-      toast.error("Username should be more than 4 letters!!");
-    }
     event.preventDefault();
+    const newErrors = validateForm(formData);
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
+      // Form submission logic here
+      console.log("Form submitted successfully!");
+    } else {
+      console.log(errors);
+      toast.error(String(Object.values(newErrors)[0]));
+      console.log("Form submission failed due to validation errors.");
+    }
+
     try {
       const res = await axios.post(
         "http://localhost:3002/auth/users/register",
-        { user_name, role, email, password }
+        formData
       );
       toast.success("Registration successful!", {
         position: "top-right",
@@ -90,6 +111,33 @@ const Register = () => {
     }
   };
 
+  const validateForm = (data) => {
+    const errors = {};
+
+    if (!data.user_name.trim()) {
+      errors.user_name = "Username is required";
+    } else if (data.user_name.length < 4) {
+      errors.user_name = "Username must be at least 4 characters long";
+    }
+
+    if (data.email.trim() && !/\S+@\S+\.\S+/.test(data.email)) {
+      errors.email = "Email is invalid";
+    }
+
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    if (!data.password) {
+      errors.password = "Password is required";
+    } else if (data.password.length < 8) {
+      errors.password = "Password must be at least 8 characters long";
+    } else if (!passwordRegex.test(data.password)) {
+      errors.password =
+        "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character";
+    }
+    return errors;
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -118,12 +166,13 @@ const Register = () => {
               <Grid item xs={12}>
                 <TextField
                   autoComplete="given-name"
-                  name="firstName"
+                  name="user_name"
                   required
                   fullWidth
                   id="firstName"
                   label="First Name"
-                  onChange={(e) => setName(e.target.value)}
+                  value={formData.user_name}
+                  onChange={handleChange}
                   autoFocus
                   InputProps={{ style: { color: "#023246" } }}
                   InputLabelProps={{ style: { color: "#023246" } }}
@@ -149,7 +198,8 @@ const Register = () => {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={formData.email}
+                  onChange={handleChange}
                   InputProps={{ style: { color: "#023246" } }}
                   InputLabelProps={{ style: { color: "#023246" } }}
                   sx={{
@@ -172,9 +222,10 @@ const Register = () => {
                   <Select
                     labelId="role-select-label"
                     id="role-select"
-                    value={role}
+                    name="role"
                     label="Role"
-                    onChange={(e) => setRole(e.target.value)}
+                    value={formData.role}
+                    onChange={handleChange}
                     inputProps={{ style: { color: "#023246" } }}
                     inputlabelprops={{ style: { color: "#023246" } }}
                     sx={{
@@ -205,9 +256,10 @@ const Register = () => {
                   id="password"
                   autoComplete="new-password"
                   onChange={(e) => {
-                    setPassword(e.target.value);
+                    handleChange(e);
                     validate(e.target.value);
                   }}
+                  value={formData.password}
                   InputProps={{ style: { color: "#023246", border: "0px" } }}
                   InputLabelProps={{ style: { color: "#023246" } }}
                   sx={{
