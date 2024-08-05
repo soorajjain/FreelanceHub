@@ -34,7 +34,7 @@ const Login = () => {
         password,
       });
 
-      console.log(res);
+      // console.log(res);
       toast.success("Login successful!", {
         position: "top-right",
         autoClose: 5000,
@@ -49,7 +49,7 @@ const Login = () => {
       if (token) {
         localStorage.setItem("token", token);
         const decodedToken = jwtDecode(token);
-        console.log(decodedToken);
+        // console.log(decodedToken);
         const { role } = decodedToken;
         setTimeout(() => {
           toast(
@@ -71,7 +71,7 @@ const Login = () => {
           if (role === "freelancer") {
             navigate("/freelancer/findJobs");
           } else if (role === "client") {
-            navigate("/client/postJob");
+            navigate("/client/freelancers");
           }
         }, 2000);
       }

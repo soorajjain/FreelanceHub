@@ -5,15 +5,18 @@ import { Button } from "reactstrap";
 export default function BraintreeDropIn({ show, onPaymentCompleted }) {
   const [braintreeReady, setBraintreeReady] = useState(false);
   const braintreeInstanceRef = useRef(null);
-  const containerRef = useRef(null);
+  const containerRef = useRef();
 
   useEffect(() => {
+    console.log("hi");
+
     const initializeBraintree = () => {
       if (containerRef.current) {
         dropin.create(
           {
             authorization: "sandbox_hc82khtp_797bs34sqj8543n8", // Replace with your actual tokenization key
-            container: containerRef.current,
+            // container: containerRef.current,
+            selector: "#dropin-container",
           },
           (error, instance) => {
             if (error) {
