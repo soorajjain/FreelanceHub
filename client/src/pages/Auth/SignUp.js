@@ -17,6 +17,7 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { toast } from "react-toastify";
+import validator from "validator";
 
 import CustomToastContainer from "../../components/common/ToastContainer";
 import axios from "axios";
@@ -29,8 +30,28 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const validate = (value) => {
+    if (
+      validator.isStrongPassword(value, {
+        minLength: 8,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1,
+      })
+    ) {
+      setErrorMessage("Strong Password");
+    } else {
+      setErrorMessage("Is Not Strong Password");
+    }
+  };
 
   const handleSubmit = async (event) => {
+    if (user_name && user_name.length < 4) {
+      toast.error("Username should be more than 4 letters!!");
+    }
     event.preventDefault();
     try {
       const res = await axios.post(
@@ -112,6 +133,11 @@ const Register = () => {
                       "&:hover fieldset": { borderColor: "#023246" },
                       "&.Mui-focused fieldset": { borderColor: "#023246" },
                     },
+                    "& input:focus": {
+                      outline: "none",
+                      boxShadow: "none",
+                      borderColor: "transparent",
+                    },
                   }}
                 />
               </Grid>
@@ -131,6 +157,11 @@ const Register = () => {
                       "& fieldset": { borderColor: "#023246" },
                       "&:hover fieldset": { borderColor: "#023246" },
                       "&.Mui-focused fieldset": { borderColor: "#023246" },
+                      "& input:focus": {
+                        outline: "none",
+                        boxShadow: "none",
+                        borderColor: "transparent",
+                      },
                     },
                   }}
                 />
@@ -151,6 +182,11 @@ const Register = () => {
                         "& fieldset": { borderColor: "#023246" },
                         "&:hover fieldset": { borderColor: "#023246" },
                         "&.Mui-focused fieldset": { borderColor: "#023246" },
+                        "& input:focus": {
+                          outline: "none",
+                          boxShadow: "none",
+                          borderColor: "transparent",
+                        },
                       },
                     }}
                   >
@@ -168,17 +204,39 @@ const Register = () => {
                   type="password"
                   id="password"
                   autoComplete="new-password"
-                  onChange={(e) => setPassword(e.target.value)}
-                  InputProps={{ style: { color: "#023246" } }}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    validate(e.target.value);
+                  }}
+                  InputProps={{ style: { color: "#023246", border: "0px" } }}
                   InputLabelProps={{ style: { color: "#023246" } }}
                   sx={{
                     "& .MuiOutlinedInput-root": {
                       "& fieldset": { borderColor: "#023246" },
                       "&:hover fieldset": { borderColor: "#023246" },
                       "&.Mui-focused fieldset": { borderColor: "#023246" },
+                      "& input:focus": {
+                        outline: "none",
+                        boxShadow: "none",
+                        borderColor: "transparent",
+                      },
                     },
                   }}
                 />
+
+                {errorMessage === "" ? null : (
+                  <span
+                    style={{
+                      margin: "10px",
+                      // paddingTop : "20px",
+                      fontWeight: "bold",
+                      color: "#023246",
+                      fontSize: "14px",
+                    }}
+                  >
+                    {errorMessage}
+                  </span>
+                )}
               </Grid>
             </Grid>
             <Button
