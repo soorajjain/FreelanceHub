@@ -61,35 +61,17 @@ const Register = () => {
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    const newErrors = validateForm(formData);
-    setErrors(newErrors);
-
-    if (Object.keys(newErrors).length === 0) {
-      // Form submission logic here
-      console.log("Form submitted successfully!");
-    } else {
-      console.log(errors);
-      toast.error(String(Object.values(newErrors)[0]));
-      console.log("Form submission failed due to validation errors.");
-    }
-
     try {
-      const res = await axios.post(
-        "http://localhost:3002/auth/users/register",
-        formData
-      );
-      toast.success("Registration successful!", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-      setTimeout(() => {
-        toast.success("Redirecting to Login Page", {
+      event.preventDefault();
+      const newErrors = validateForm(formData);
+      setErrors(newErrors);
+
+      if (Object.keys(newErrors).length === 0) {
+        const res = await axios.post(
+          "http://localhost:3002/auth/users/register",
+          formData
+        );
+        toast.success("Registration successful!", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -98,11 +80,28 @@ const Register = () => {
           draggable: true,
           progress: undefined,
         });
-      }, 1000);
-      setTimeout(() => {
-        navigate("/login");
-      }, 3000);
+        setTimeout(() => {
+          toast.success("Redirecting to Login Page", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }, 1000);
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+        console.log("Form submitted successfully!");
+      } else {
+        console.log(errors);
+        toast.error(String(Object.values(newErrors)[0]));
+        console.log("Form submission failed due to validation errors.");
+      }
     } catch (error) {
+      console.log(error);
       if (error.response && error.response.data) {
         toast.error(
           error.response.data.msg || "Failed to register. Please try again."
@@ -127,11 +126,7 @@ const Register = () => {
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-    if (!data.password) {
-      errors.password = "Password is required";
-    } else if (data.password.length < 8) {
-      errors.password = "Password must be at least 8 characters long";
-    } else if (!passwordRegex.test(data.password)) {
+    if (data.password.length < 8 && !passwordRegex.test(data.password)) {
       errors.password =
         "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character";
     }
