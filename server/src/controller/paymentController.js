@@ -12,7 +12,7 @@ export const generateToken = (req, res) => {
 
 export const processPayment = (req, res) => {
   const nonceFromTheClient = req.body.paymentMethodNonce;
-  const amount = req.body.amount; // Adjust this as needed
+  const amount = req.body.amount;
 
   gateway.transaction.sale(
     {
