@@ -10,7 +10,7 @@ function About() {
             About Us
           </h1>
           <h3 className="text-[16px] md:text-lg text-center w-[90%]">
-            – your premier destination for connecting
+            Welcome to Freelance HUB – your premier destination for connecting
             talented freelancers with innovative projects worldwide. Our mission
             is to revolutionize the way businesses and freelancers collaborate,
             making it easier than ever to find the right match for every
