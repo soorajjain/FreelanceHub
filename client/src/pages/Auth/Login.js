@@ -126,6 +126,11 @@ const Login = () => {
                     "& fieldset": { borderColor: "#023246" },
                     "&:hover fieldset": { borderColor: "#023246" },
                     "&.Mui-focused fieldset": { borderColor: "#023246" },
+                    "& input:focus": {
+                      outline: "none",
+                      boxShadow: "none",
+                      borderColor: "transparent",
+                    },
                   },
                 }}
               />
@@ -146,6 +151,11 @@ const Login = () => {
                     "& fieldset": { borderColor: "#023246" },
                     "&:hover fieldset": { borderColor: "#023246" },
                     "&.Mui-focused fieldset": { borderColor: "#023246" },
+                    "& input:focus": {
+                      outline: "none",
+                      boxShadow: "none",
+                      borderColor: "transparent",
+                    },
                   },
                 }}
               />

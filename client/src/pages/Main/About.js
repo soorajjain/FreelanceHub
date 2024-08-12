@@ -2,14 +2,15 @@ import React from "react";
 
 function About() {
   return (
-    <div id="about">
-      <div className="howitwork max-w-[1170px] mx-auto text-[#141C3A] flex justify-center items-center mt-20 flex-col ">
+    <div id="hey">
+      <div id="about"></div>
+      <div className="howitwork max-w-[1170px] mx-auto text-[#141C3A] flex justify-center items-center flex-col pt-36">
         <div className="flex flex-col gap-5 sm:mx-12  md:mx-12 lg:mx-auto mx-6 justify-center items-center">
           <h1 className="font-serif text-4xl font-bold text-center">
             About Us
           </h1>
           <h3 className="text-[16px] md:text-lg text-center w-[90%]">
-            Welcome to Freelance HUB – your premier destination for connecting
+            – your premier destination for connecting
             talented freelancers with innovative projects worldwide. Our mission
             is to revolutionize the way businesses and freelancers collaborate,
             making it easier than ever to find the right match for every

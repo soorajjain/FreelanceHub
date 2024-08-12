@@ -131,6 +131,8 @@ const PostJob = () => {
     return `${year}-${month}-${day}`;
   };
 
+  const today = new Date().toISOString().split("T")[0];
+
   const navigateToPostJob = () => {
     navigate("/client/postJob");
   };
@@ -242,9 +244,10 @@ const PostJob = () => {
                 className="shadow-sm bg-gray-50 border border-gray-300 text-[#141C3A] text-sm rounded-lg focus:text-[#141C3A] block w-full p-2.5 "
                 type="date"
                 name="deadline"
-                value={formData.deadline}
+                value={formData.deadline || today}
                 onChange={handleChange}
                 required
+                min={today}
               />
             </div>
           </div>

@@ -170,6 +170,9 @@ const PostJob = () => {
     return `${year}-${month}-${day}`;
   };
 
+  // Get today's date in YYYY-MM-DD format
+  const today = new Date().toISOString().split("T")[0];
+
   const handleUpdateJob = (jobId) => {
     navigate(`/client/updateJob/${jobId}`);
   };
@@ -293,12 +296,13 @@ const PostJob = () => {
               Deadline
             </label>
             <input
-              className="shadow-sm bg-gray-50 border border-gray-300 text-[#141C3A] text-sm rounded-lg focus:text-[#141C3A] block w-full p-2.5 "
+              className="shadow-sm bg-gray-50 border border-gray-300 text-[#141C3A] text-sm rounded-lg focus:text-[#141C3A] focus:bg-white block w-full p-2.5 "
               type="date"
               name="deadline"
               value={formData.deadline}
               onChange={handleChange}
               required
+              min={today}
             />
           </div>
           <div className="flex justify-center items-center">
