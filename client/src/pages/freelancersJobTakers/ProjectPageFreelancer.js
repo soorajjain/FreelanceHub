@@ -39,7 +39,10 @@ const ProjectPageFreelancer = () => {
       // console.log("Fetched projects:", response.data);
 
       const sortedProjects = response.data
-        .filter((project) => project.freelancer._id === freelancerId)
+        .filter(
+          (project) =>
+            project.freelancer && project.freelancer._id === freelancerId
+        )
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
       setProjects(sortedProjects);

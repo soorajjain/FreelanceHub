@@ -58,10 +58,13 @@ const ProjectPageClient = () => {
         console.log("Fetched projects:", response.data);
 
         const sortedProjects = response.data
-          .filter((project) => project.client._id === clientId)
+          .filter(
+            (project) => project.client && project.client._id === clientId
+          ) // Check if client exists and matches the ID
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
         setProjects(sortedProjects);
+        console.log(sortedProjects);
       } catch (error) {
         console.log("Fetching projects error: " + error);
       }
